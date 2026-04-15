@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WinSkin — Investor Deck</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #0a0a12;
+    --bg2: #0f0f1a;
+    --bg3: #141425;
+    --card: rgba(20,20,40,0.85);
+    --border: rgba(139,92,246,0.25);
+    --purple: #8b5cf6;
+    --purple-light: #a78bfa;
+    --purple-pale: #c4b5fd;
+    --yellow: #fbbf24;
+    --green: #22c55e;
+    --red: #ef4444;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --gradient: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+
+  /* ─── NAV ─── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,18,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 52px;
+  }
+  .nav-logo { font-size: 18px; font-weight: 900; color: var(--purple-light); letter-spacing: -0.5px; }
+  .nav-dots { display: flex; gap: 6px; }
+  .nav-dot {
+    width: 28px; height: 6px; border-radius: 3px;
+    background: rgba(139,92,246,0.25);
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+  .nav-dot.active { background: var(--purple); }
+  .nav-counter { font-size: 12px; color: var(--text-muted); font-weight: 600; min-width: 48px; text-align: right; }
+  .nav-arrows { display: flex; gap: 8px; }
+  .nav-btn {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { background: var(--border); }
+
+  /* ─── SLIDE ─── */
+  .slide {
+    display: none;
+    min-height: 100vh;
+    padding: 68px 0 0;
+    flex-direction: column;
+  }
+  .slide.active { display: flex; }
+
+  .slide-inner {
+    flex: 1;
+    padding: 28px 48px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ─── SLIDE HEADER ─── */
+  .slide-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .slide-num {
+    font-size: 11px; font-weight: 800; letter-spacing: 2px;
+    color: var(--purple);
+    background: rgba(139,92,246,0.12);
+    border: 1px solid rgba(139,92,246,0.3);
+    border-radius: 6px;
+    padding: 4px 10px;
+    text-transform: uppercase;
+  }
+  .slide-title {
+    font-size: 26px; font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .slide-title span { color: var(--purple-light); }
+
+  /* ─── SLIDE CONCLUSION (bottom) ─── */
+  .slide-conclusion {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(139,92,246,0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .slide-conclusion-icon {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .slide-conclusion-text {
+    font-size: 16px; font-weight: 700;
+    color: var(--purple-pale);
+    line-height: 1.3;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .card-purple { border-color: rgba(139,92,246,0.5); background: rgba(139,92,246,0.08); }
+  .card-yellow { border-color: rgba(251,191,36,0.4); background: rgba(251,191,36,0.06); }
+  .card-green { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.06); }
+
+  .big-num {
+    font-size: 36px; font-weight: 900;
+    color: var(--purple-pale);
+    line-height: 1;
+  }
+  .big-num-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── GRID ─── */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .g4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+  /* ─── TAG ─── */
+  .tag {
+    display: inline-block;
+    font-size: 10px; font-weight: 800;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .tag-purple { background: rgba(139,92,246,0.2); color: var(--purple-light); border: 1px solid rgba(139,92,246,0.4); }
+  .tag-yellow { background: rgba(251,191,36,0.15); color: var(--yellow); border: 1px solid rgba(251,191,36,0.3); }
+  .tag-green { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .tag-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  /* ─── TABLE ─── */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: rgba(139,92,246,0.15);
+    color: var(--purple-pale);
+    font-weight: 700;
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 2px solid rgba(139,92,246,0.3);
+  }
+  tbody tr { border-bottom: 1px solid rgba(139,92,246,0.1); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 9px 12px; color: var(--text-muted); }
+  tbody tr.highlight td { color: var(--text); font-weight: 700; background: rgba(139,92,246,0.08); }
+  .c-yes { color: var(--green); font-weight: 700; }
+  .c-no { color: var(--red); font-weight: 600; }
+  .c-partial { color: var(--yellow); font-weight: 600; }
+  .c-purple { color: var(--purple-pale); font-weight: 800; }
+
+  /* ─── FLOW DIAGRAM ─── */
+  .flow { display: flex; align-items: center; gap: 0; }
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    padding: 14px 10px;
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 10px;
+    position: relative;
+  }
+  .flow-arrow {
+    font-size: 20px; color: var(--purple);
+    padding: 0 6px; flex-shrink: 0;
+  }
+  .flow-icon { font-size: 24px; margin-bottom: 6px; }
+  .flow-step-title { font-size: 13px; font-weight: 700; color: var(--text); }
+  .flow-step-sub { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  /* ─── FUNNEL ─── */
+  .funnel { display: flex; flex-direction: column; gap: 4px; }
+  .funnel-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    border-radius: 8px;
+  }
+  .funnel-label { font-size: 13px; color: var(--text-muted); min-width: 180px; }
+  .funnel-bar-wrap { flex: 1; background: rgba(139,92,246,0.1); border-radius: 4px; height: 8px; }
+  .funnel-bar { height: 8px; border-radius: 4px; background: var(--gradient); }
+  .funnel-val { font-size: 14px; font-weight: 800; color: var(--purple-pale); min-width: 80px; text-align: right; }
+
+  /* ─── Q&A ─── */
+  .qa-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .qa-q {
+    background: rgba(139,92,246,0.1);
+    padding: 12px 16px;
+    font-size: 14px; font-weight: 700;
+    color: var(--text);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .qa-q-num { color: var(--purple-light); font-size: 12px; font-weight: 800; min-width: 20px; margin-top: 1px; }
+  .qa-a {
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ─── PARTNER CARD ─── */
+  .partner-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .partner-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .partner-title { font-size: 16px; font-weight: 800; color: var(--text); }
+  .partner-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .partner-bullet {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .partner-bullet::before { content: "▸"; color: var(--purple-light); flex-shrink: 0; margin-top: 1px; }
+
+  /* ─── TIMELINE ─── */
+  .timeline { display: flex; flex-direction: column; gap: 0; }
+  .tl-item {
+    display: flex;
+    gap: 16px;
+    padding-bottom: 18px;
+    position: relative;
+  }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; }
+  .tl-circle {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 900;
+    color: #fff; flex-shrink: 0;
+  }
+  .tl-line {
+    width: 2px; flex: 1;
+    background: linear-gradient(to bottom, rgba(139,92,246,0.4), transparent);
+    margin-top: 4px;
+  }
+  .tl-content { flex: 1; padding-top: 6px; }
+  .tl-time { font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .tl-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .tl-desc { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+  .tl-benefit {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600;
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.25);
+    border-radius: 20px;
+    padding: 3px 10px;
+    color: var(--green);
+    margin-top: 6px;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse 120% 80% at 50% 50%, rgba(139,92,246,0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(109,40,217,0.12) 0%, transparent 60%),
+                var(--bg);
+    padding: 52px 48px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(139,92,246,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(139,92,246,0.06) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(139,92,246,0.15);
+    border: 1px solid rgba(139,92,246,0.4);
+    border-radius: 30px;
+    padding: 6px 16px;
+    font-size: 13px; font-weight: 700;
+    color: var(--purple-pale);
+    margin-bottom: 28px;
+    position: relative;
+  }
+  .hero-badge-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.3); }
+  }
+  .hero-title {
+    font-size: 52px; font-weight: 900;
+    line-height: 1.08;
+    letter-spacing: -1.5px;
+    color: var(--text);
+    max-width: 900px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  .hero-title .accent { color: var(--purple-light); }
+  .hero-title .gold { color: var(--yellow); }
+  .hero-sub {
+    font-size: 20px;
+    color: var(--text-muted);
+    max-width: 700px;
+    line-height: 1.6;
+    margin-bottom: 36px;
+    position: relative;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    background: rgba(10,10,18,0.7);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 36px;
+  }
+  .hero-stat {
+    flex: 1;
+    padding: 20px 24px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-val { font-size: 32px; font-weight: 900; color: var(--purple-pale); line-height: 1; }
+  .hero-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+  .hero-prime {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(251,191,36,0.07);
+    border: 1px solid rgba(251,191,36,0.25);
+    border-radius: 12px;
+    padding: 14px 24px;
+    position: relative;
+    max-width: 700px;
+  }
+  .hero-prime-icon { font-size: 28px; }
+  .hero-prime-text { text-align: left; }
+  .hero-prime-title { font-size: 16px; font-weight: 800; color: var(--yellow); }
+  .hero-prime-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ─── INSIGHT PILL ─── */
+  .insight {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(139,92,246,0.07);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-left: 3px solid var(--purple);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px; color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .insight span { color: var(--text); font-weight: 600; }
+
+  /* ─── STAT BOX ─── */
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-box-val { font-size: 28px; font-weight: 900; color: var(--purple-pale); }
+  .stat-box-label { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── PROFIT FLOW ─── */
+  .money-flow {
+    display: flex; align-items: stretch; gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .mf-block {
+    flex: 1;
+    padding: 18px 16px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  }
+  .mf-block:last-child { border-right: none; }
+  .mf-icon { font-size: 24px; }
+  .mf-val { font-size: 20px; font-weight: 900; }
+  .mf-label { font-size: 11px; color: var(--text-muted); line-height: 1.4; max-width: 120px; }
+
+  /* ─── MAP VIZ ─── */
+  .region-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(139,92,246,0.1);
+  }
+  .region-bar:last-child { border-bottom: none; }
+  .region-name { font-size: 13px; font-weight: 600; min-width: 110px; color: var(--text); }
+  .region-bar-wrap { flex: 1; background: rgba(139,92,246,0.1); border-radius: 4px; height: 10px; }
+  .region-bar-fill { height: 10px; border-radius: 4px; }
+  .region-val { font-size: 13px; font-weight: 800; color: var(--purple-pale); min-width: 60px; text-align: right; }
+
+  /* ─── SUMMARY CARD ─── */
+  .summary-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .summary-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: var(--gradient);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .summary-content {}
+  .summary-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+  .summary-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── HIGHLIGHT BOX ─── */
+  .hl-box {
+    background: var(--gradient);
+    border-radius: 12px;
+    padding: 18px 24px;
+    text-align: center;
+  }
+  .hl-box-title { font-size: 18px; font-weight: 900; color: #fff; }
+  .hl-box-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 4px; }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(139,92,246,0.4); border-radius: 2px; }
+
+  /* ════════════════════════════════
+     TABLET  (≤ 1024px)
+  ════════════════════════════════ */
+  @media (max-width: 1024px) {
+    .slide-inner { padding: 22px 28px 18px; }
+    .slide-title { font-size: 22px; }
+    .hero-title { font-size: 40px; }
+    .hero-sub { font-size: 17px; }
+    .g4 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ════════════════════════════════
+     MOBILE  (≤ 768px)
+  ════════════════════════════════ */
+  @media (max-width: 768px) {
+
+    /* ── NAV ── */
+    .nav {
+      padding: 0 16px;
+      height: 48px;
+    }
+    .nav-logo { font-size: 15px; }
+    .nav-dots { display: none; }        /* убираем точки — слишком широко */
+    .nav-counter { font-size: 11px; min-width: 36px; }
+    .nav-btn { width: 28px; height: 28px; font-size: 14px; }
+
+    /* Добавляем мобильный счётчик-слайдер снизу */
+    .mobile-nav-bar {
+      display: flex !important;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10,10,18,0.97);
+      border-top: 1px solid var(--border);
+      padding: 8px 16px;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ── SLIDE ── */
+    .slide {
+      min-height: 100vh;
+      padding: 48px 0 68px;     /* bottom = высота мобильного бара */
+    }
+    .slide-inner {
+      padding: 16px 16px 16px;
+    }
+
+    /* ── SLIDE HEADER ── */
+    .slide-header {
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .slide-title { font-size: 18px; line-height: 1.25; }
+    .slide-num { font-size: 10px; }
+
+    /* ── SLIDE CONCLUSION ── */
+    .slide-conclusion {
+      padding-top: 14px;
+      gap: 10px;
+    }
+    .slide-conclusion-icon { width: 30px; height: 30px; font-size: 13px; }
+    .slide-conclusion-text { font-size: 13px; }
+
+    /* ── GRIDS → 1 column ── */
+    .g2, .g3, .g4 {
+      grid-template-columns: 1fr !important;
+      gap: 10px;
+    }
+
+    /* ── CARDS ── */
+    .card { padding: 14px; border-radius: 10px; }
+    .big-num { font-size: 28px; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 60px 16px 32px;
+      min-height: 100vh;
+    }
+    .hero-title {
+      font-size: 28px;
+      letter-spacing: -0.5px;
+      margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+    .hero-stats {
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 20px;
+    }
+    .hero-stat {
+      border-right: none !important;
+      border-bottom: 1px solid var(--border);
+      padding: 14px 16px;
+    }
+    .hero-stat:last-child { border-bottom: none; }
+    .hero-stat-val { font-size: 24px; }
+    .hero-prime {
+      flex-direction: column;
+      text-align: center;
+      gap: 8px;
+      padding: 12px 16px;
+    }
+    .hero-prime-text { text-align: center; }
+    .hero-prime-title { font-size: 14px; }
+    .hero-badge { font-size: 12px; margin-bottom: 20px; }
+
+    /* ── FLOW DIAGRAM → vertical ── */
+    .flow {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .flow-arrow {
+      transform: rotate(90deg);
+      padding: 4px 0;
+      text-align: center;
+    }
+    .flow-step { padding: 12px; }
+    .flow-icon { font-size: 20px; }
+    .flow-step-title { font-size: 12px; }
+    .flow-step-sub { font-size: 11px; }
+
+    /* ── MONEY FLOW → vertical ── */
+    .money-flow {
+      flex-direction: column;
+    }
+    .mf-block {
+      border-right: none !important;
+      border-bottom: 1px solid var(--border);
+      padding: 12px;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+      gap: 10px;
+    }
+    .mf-block:last-child { border-bottom: none; }
+    .mf-val { font-size: 18px; }
+    .mf-label { font-size: 11px; max-width: none; flex: 1; }
+
+    /* ── TABLE → horizontal scroll ── */
+    .table-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 10px;
+    }
+    table { min-width: 600px; font-size: 11px; }
+    thead th { padding: 8px 10px; font-size: 11px; }
+    tbody td { padding: 7px 10px; font-size: 11px; }
+
+    /* ── FUNNEL ── */
+    .funnel-label { font-size: 11px; min-width: 130px; }
+    .funnel-val { font-size: 12px; min-width: 60px; }
+
+    /* ── Q&A grid → 1 column ── */
+    .qa-grid-2 { grid-template-columns: 1fr !important; }
+    .qa-q { font-size: 13px; padding: 10px 12px; }
+    .qa-a { font-size: 12px; padding: 10px 12px; }
+
+    /* ── PARTNER CARD ── */
+    .partner-card { padding: 14px; }
+    .partner-title { font-size: 14px; }
+    .partner-desc { font-size: 12px; }
+    .partner-bullet { font-size: 11px; }
+
+    /* ── TIMELINE ── */
+    .tl-title { font-size: 14px; }
+    .tl-desc { font-size: 11px; }
+    .tl-benefit { font-size: 10px; }
+    .tl-circle { width: 30px; height: 30px; font-size: 12px; }
+
+    /* ── REGION BARS ── */
+    .region-name { font-size: 12px; min-width: 90px; }
+    .region-val { font-size: 12px; min-width: 48px; }
+
+    /* ── STAT BOX ── */
+    .stat-box-val { font-size: 22px; }
+    .stat-box-label { font-size: 11px; }
+
+    /* ── HIGHLIGHT BOX ── */
+    .hl-box { padding: 14px 16px; }
+    .hl-box-title { font-size: 15px; }
+    .hl-box-sub { font-size: 12px; }
+
+    /* ── INSIGHT ── */
+    .insight { font-size: 12px; padding: 9px 12px; }
+
+    /* ── SUMMARY ── */
+    .summary-item { padding: 14px; gap: 10px; }
+    .summary-title { font-size: 14px; }
+    .summary-desc { font-size: 12px; }
+    .summary-icon { width: 38px; height: 38px; font-size: 17px; }
+
+    /* ── MKT CHANNEL ── */
+    .mkt-channel { padding: 14px; }
+    .mkt-title { font-size: 13px; }
+    .mkt-item { font-size: 11px; }
+
+    /* ── MISC ── */
+    .tag { font-size: 9px; padding: 2px 6px; }
+  }
+
+  /* ════════════════════════════════
+     SMALL PHONES  (≤ 390px)
+  ════════════════════════════════ */
+  @media (max-width: 390px) {
+    .hero-title { font-size: 24px; }
+    .slide-title { font-size: 16px; }
+    .slide-inner { padding: 12px 12px; }
+    .nav { padding: 0 12px; }
+    .big-num { font-size: 24px; }
+    .hero-stat-val { font-size: 20px; }
+  }
+
+  /* Desktop — скрываем мобильный бар */
+  .mobile-nav-bar { display: none; }
+
+  /* ─── MARKETING ICON GRID ─── */
+  .mkt-channel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .mkt-channel-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .mkt-icon { font-size: 22px; }
+  .mkt-title { font-size: 14px; font-weight: 800; color: var(--text); }
+  .mkt-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    font-size: 12px; color: var(--text-muted);
+    line-height: 1.5; margin-bottom: 5px;
+  }
+  .mkt-item::before { content: "→"; color: var(--purple-light); flex-shrink: 0; }
+
+/* ─── SOURCE / FOOTNOTE STYLES ─── */
+.src {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(148,163,184,0.6);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+.src::before { content: "↗ "; color: rgba(139,92,246,0.55); }
+
+.slide-sources {
+  font-size: 10px;
+  color: rgba(148,163,184,0.45);
+  padding: 6px 0 0;
+  line-height: 1.7;
+  border-top: 1px dashed rgba(139,92,246,0.12);
+  margin-top: 8px;
+}
+.slide-sources b { color: rgba(196,181,253,0.6); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ NAV ═══════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-logo">WIN<span style="color:#fff">SKIN</span></div>
+  <div class="nav-dots" id="navDots"></div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="nav-counter" id="navCounter">1 / 11</span>
+    <div class="nav-arrows">
+      <button class="nav-btn" onclick="prevSlide()">‹</button>
+      <button class="nav-btn" onclick="nextSlide()">›</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════ SLIDE 00 — COVER ══════════════════════════════ -->
+<div class="slide active" id="slide-0">
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Pre-Seed раунд открыт · $500K
+    </div>
+    <h1 class="hero-title">
+      <span class="accent">~$1.2B рынок</span> в СНГ —<br>
+      <span class="gold">без единого офлайн-игрока</span>
+    </h1>
+    <p class="hero-sub">
+      WinSkin — маркетплейс скинов CS2 внутри компьютерных клубов.<br>
+      13 клубов PRIME уже в сети. 3 500 клубов Центральной Азии — следующие.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val">~$8B</div>
+        <div class="hero-stat-label">Глобальный рынок скинов (FutureDataStats, 2024)</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">3 500</div>
+        <div class="hero-stat-label">Клубов в Центральной Азии</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">13</div>
+        <div class="hero-stat-label">Клубов PRIME — старт уже сейчас</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val">5–10%</div>
+        <div class="hero-stat-label">Комиссия vs 15% Steam</div>
+      </div>
+    </div>
+    <div class="hero-prime">
+      <div class="hero-prime-icon">🏆</div>
+      <div class="hero-prime-text">
+        <div class="hero-prime-title">PRIME GameHub — гарантированный стартовый партнёр</div>
+        <div class="hero-prime-sub">13 клубов · договорённость подтверждена · нулевые затраты на первый запуск</div>
+      </div>
+    </div>
+    <div style="position:relative;margin-top:28px;display:flex;gap:12px;font-size:13px;color:var(--text-muted)">
+      <span>🎮 CS2 / Dota 2 / Rust</span>
+      <span>·</span>
+      <span>📍 Казахстан → СНГ</span>
+      <span>·</span>
+      <span>🔒 Steam Escrow API</span>
+      <span>·</span>
+      <span>💳 Локальные платежи</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 01 — РЫНОК ══════════════════════════════ -->
+<div class="slide" id="slide-1">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">01</span>
+      <h2 class="slide-title">Рынок <span>~$8B</span> — слабо освоен в СНГ</h2>
+    </div>
+
+    <div class="g3" style="margin-bottom:20px">
+      <div class="card card-purple" style="padding:20px">
+        <div class="tag tag-purple" style="margin-bottom:10px">TAM</div>
+        <div class="big-num">~$8B</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:8px">Глобальный рынок скинов</div>
+        <div class="big-num-label" style="margin-top:6px">CS2, Dota 2, Rust, Valorant, TF2 — все торгуемые скины на всех платформах. CAGR 12–13.5%.</div>
+        <div class="src">FutureDataStats, 2024 — Tactical FPS Game Skins Market Report</div>
+      </div>
+      <div class="card" style="padding:20px">
+        <div class="tag tag-yellow" style="margin-bottom:10px">SAM</div>
+        <div class="big-num">~$1.2B</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:8px">СНГ + MENA рынок</div>
+        <div class="big-num-label" style="margin-top:6px">~15% мирового рынка по региональной структуре. Россия — 66M геймеров, СНГ суммарно 90M+. Рост ~13% г/г.</div>
+        <div class="src">Расчёт: 15% от TAM $8B; геймеры — Newzoo Global Games Market Report; рост — FutureDataStats 2024</div>
+      </div>
+      <div class="card card-green" style="padding:20px">
+        <div class="tag tag-green" style="margin-bottom:10px">SOM</div>
+        <div class="big-num">~$120M</div>
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-top:8px">Достижимо за 3 года</div>
+        <div class="big-num-label" style="margin-top:6px">Консервативный захват 10% SAM через 3 500 клубов ЦА — прямой офлайн-канал без аналогов.</div>
+        <div class="src">Внутренняя модель: 10% от SAM ~$1.2B при выходе на 500+ клубов</div>
+      </div>
+    </div>
+
+    <!-- Bar chart визуализация -->
+    <div class="card" style="margin-bottom:16px;padding:20px">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px">📊 Структура рынка ~$8B по регионам <span style="font-size:11px;color:var(--text-muted);font-weight:500">(FutureDataStats 2024)</span></div>
+      <div class="region-bar">
+        <div class="region-name">🌍 США / EU</div>
+        <div class="region-bar-wrap"><div class="region-bar-fill" style="width:85%;background:linear-gradient(90deg,rgba(139,92,246,0.6),rgba(139,92,246,0.3))"></div></div>
+        <div class="region-val">~$3.7B</div>
+      </div>
+      <div class="region-bar">
+        <div class="region-name">🇨🇳 Азия</div>
+        <div class="region-bar-wrap"><div class="region-bar-fill" style="width:65%;background:linear-gradient(90deg,rgba(139,92,246,0.6),rgba(139,92,246,0.3))"></div></div>
+        <div class="region-val">~$3.2B</div>
+      </div>
+      <div class="region-bar" style="border-color:rgba(139,92,246,0.3)">
+        <div class="region-name" style="color:var(--purple-pale);font-weight:800">🎯 СНГ + MENA</div>
+        <div class="region-bar-wrap"><div class="region-bar-fill" style="width:20%;background:var(--gradient)"></div></div>
+        <div class="region-val" style="color:var(--purple-pale)">~$1.2B</div>
+      </div>
+    </div>
+
+    <div class="g4" style="margin-bottom:16px">
+      <div class="stat-box"><div class="stat-box-val">90M+</div><div class="stat-box-label">Геймеров в СНГ</div><div class="src" style="text-align:left">Newzoo: 66M в РФ, ~15M УЗ, ~12M КЗ и др.</div></div>
+      <div class="stat-box"><div class="stat-box-val">~13%</div><div class="stat-box-label">Рост рынка скинов г/г</div><div class="src" style="text-align:left">CAGR; FutureDataStats 2024</div></div>
+      <div class="stat-box"><div class="stat-box-val">$120</div><div class="stat-box-label">Расход на скины/год</div><div class="src" style="text-align:left">Оценка для активных трейдеров CS2</div></div>
+      <div class="stat-box"><div class="stat-box-val">3 500</div><div class="stat-box-label">Клубов в Центральной Азии</div><div class="src" style="text-align:left">Данные отраслевого B2B-ресёрча</div></div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">~$1.2B рынок в СНГ растёт на ~13% в год — и ни одной платформы с офлайн-присутствием. WinSkin занимает эту нишу первым.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 02a — МОДЕЛЬ ДОХОДА: МЕХАНИКА ══════════════════════════════ -->
+<div class="slide" id="slide-2">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">02a</span>
+      <h2 class="slide-title">Модель дохода — <span>механика комиссий</span></h2>
+    </div>
+
+    <!-- Money Flow Diagram -->
+    <div class="card" style="margin-bottom:18px;padding:20px">
+      <div style="font-size:13px;font-weight:700;color:var(--text-muted);margin-bottom:14px;text-transform:uppercase;letter-spacing:1px">Как распределяется каждый $ со сделки</div>
+      <div class="money-flow">
+        <div class="mf-block">
+          <div class="mf-icon">🎮</div>
+          <div class="mf-val" style="color:var(--text)">$25</div>
+          <div class="mf-label">Средний чек сделки (скин CS2)</div>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 4px;font-size:24px;color:var(--purple)">→</div>
+        <div class="mf-block" style="background:rgba(139,92,246,0.08)">
+          <div class="mf-icon">💰</div>
+          <div class="mf-val" style="color:var(--purple-pale)">$1.5–2.5</div>
+          <div class="mf-label">Комиссия WinSkin (6–10%)</div>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 4px;font-size:24px;color:var(--purple)">→</div>
+        <div class="mf-block" style="background:rgba(34,197,94,0.06)">
+          <div class="mf-icon">🏪</div>
+          <div class="mf-val" style="color:var(--green)">$0.6–1.0</div>
+          <div class="mf-label">Rev-share клубу (40%)</div>
+        </div>
+        <div style="display:flex;align-items:center;padding:0 4px;font-size:24px;color:var(--purple)">→</div>
+        <div class="mf-block" style="background:rgba(251,191,36,0.06)">
+          <div class="mf-icon">📈</div>
+          <div class="mf-val" style="color:var(--yellow)">$0.9–1.5</div>
+          <div class="mf-label">WinSkin чистая выручка (60%)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g4" style="margin-bottom:18px">
+      <div class="card card-purple" style="padding:16px;text-align:center">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:600">КОМИССИЯ</div>
+        <div class="big-num" style="font-size:32px">5–10%</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px">с каждой сделки<br><span style="color:var(--purple-pale)">vs 15% у Steam</span></div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:600">REV-SHARE КЛУБУ</div>
+        <div class="big-num" style="font-size:32px">30–50%</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px">от комиссии WinSkin<br>с трафика клуба</div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:600">СРЕДНИЙ ЧЕК</div>
+        <div class="big-num" style="font-size:32px">$8–25</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px">CS2 активный<br>трейдинг-сегмент</div>
+        <div class="src">CS.MONEY Analytics, март 2024: 60%+ скинов &lt;$10</div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:600">КОНВЕРСИЯ</div>
+        <div class="big-num" style="font-size:32px">8–12%</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:6px">от CS2-игроков<br>в клубе</div>
+        <div class="src" style="text-align:left">Внутренняя оценка; верификация в пилоте PRIME</div>
+      </div>
+    </div>
+
+    <!-- Сравнение с конкурентами по комиссии -->
+    <div class="card" style="margin-bottom:16px;padding:18px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">🎯 WinSkin выгоднее Steam — дороже демпингующих платформ, но с уникальным каналом</div>
+      <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
+        <div style="text-align:center;flex:1">
+          <div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:6px;padding:6px;margin-bottom:4px;font-size:11px;color:var(--green);font-weight:700">DMarket</div>
+          <div style="font-size:18px;font-weight:900;color:var(--text-muted)">2%</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:6px;padding:6px;margin-bottom:4px;font-size:11px;color:var(--green);font-weight:700">Buff163</div>
+          <div style="font-size:18px;font-weight:900;color:var(--text-muted)">2.5%</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:6px;padding:6px;margin-bottom:4px;font-size:11px;color:var(--green);font-weight:700">CS.MONEY</div>
+          <div style="font-size:18px;font-weight:900;color:var(--text-muted)">3–5%</div>
+        </div>
+        <div style="text-align:center;flex:1.2;border:2px solid var(--purple);border-radius:8px;padding:8px">
+          <div style="background:var(--gradient);border-radius:6px;padding:6px;margin-bottom:4px;font-size:11px;color:#fff;font-weight:800">WinSkin ★</div>
+          <div style="font-size:22px;font-weight:900;color:var(--purple-pale)">5–10%</div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:2px">+ офлайн-канал</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.3);border-radius:6px;padding:6px;margin-bottom:4px;font-size:11px;color:var(--yellow);font-weight:700">Skinport</div>
+          <div style="font-size:18px;font-weight:900;color:var(--text-muted)">6–8%</div>
+        </div>
+        <div style="text-align:center;flex:1">
+          <div style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:6px;margin-bottom:4px;font-size:11px;color:var(--red);font-weight:700">Steam</div>
+          <div style="font-size:18px;font-weight:900;color:var(--red)">15%</div>
+        </div>
+      </div>
+      <div class="slide-sources" style="margin-top:12px">
+        <b>DMarket 2%</b> — DMarket Help Center (support.dmarket.com) &nbsp;
+        <b>Buff163 2.5%</b> — CSDB.gg / CSGOSKINS.gg &nbsp;
+        <b>CS.MONEY 3–5%</b> — cs.money/price-policy (5% до $1K, 3% от $1K) &nbsp;
+        <b>Skinport 6–8%</b> — skinport.com/blog (8% стандарт, от 6% для дорогих) &nbsp;
+        <b>Steam 15%</b> — Steam Community Market FAQ (5% Valve + 10% разработчик)
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">Комиссия 5–10% — оптимальный баланс: дешевле Steam вдвое, но с уникальным офлайн-каналом, которого нет у дешёвых конкурентов. Ценность не в минимальной цене — в доступности.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 02b — UNIT ECONOMICS ══════════════════════════════ -->
+<div class="slide" id="slide-3">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">02b</span>
+      <h2 class="slide-title">Модель дохода — <span>юнит-экономика и рост</span></h2>
+    </div>
+
+    <div class="g2" style="margin-bottom:18px">
+      <!-- Funnel расчёт 1 клуба -->
+      <div class="card" style="padding:18px">
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px">📐 1 клуб PRIME: доход за месяц</div>
+        <div class="funnel">
+          <div class="funnel-row" style="background:rgba(139,92,246,0.06)">
+            <div class="funnel-label">Уникальных игроков/мес</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%"></div></div>
+            <div class="funnel-val">1 200</div>
+          </div>
+          <div class="funnel-row" style="background:rgba(139,92,246,0.04)">
+            <div class="funnel-label">Играют в CS2 (~60%)</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:60%"></div></div>
+            <div class="funnel-val">720</div>
+          </div>
+          <div class="funnel-row" style="background:rgba(139,92,246,0.03)">
+            <div class="funnel-label">Конверсия 10%</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:10%"></div></div>
+            <div class="funnel-val">72</div>
+          </div>
+          <div class="funnel-row" style="background:rgba(251,191,36,0.05);border-radius:6px">
+            <div class="funnel-label" style="color:var(--yellow);font-weight:700">Чек ×$25 → GMV</div>
+            <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:15%;background:rgba(251,191,36,0.8)"></div></div>
+            <div class="funnel-val" style="color:var(--yellow)">$1 800</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;display:flex;gap:12px">
+          <div style="flex:1;text-align:center;background:rgba(139,92,246,0.08);border-radius:8px;padding:10px">
+            <div style="font-size:11px;color:var(--text-muted)">WinSkin (8% ком.)</div>
+            <div style="font-size:20px;font-weight:900;color:var(--purple-pale)">$144</div>
+            <div style="font-size:11px;color:var(--text-muted)">выручка/мес</div>
+          </div>
+          <div style="flex:1;text-align:center;background:rgba(34,197,94,0.08);border-radius:8px;padding:10px">
+            <div style="font-size:11px;color:var(--text-muted)">Клубу (40%)</div>
+            <div style="font-size:20px;font-weight:900;color:var(--green)">$58</div>
+            <div style="font-size:11px;color:var(--text-muted)">пассивно/мес</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scaling table -->
+      <div class="card" style="padding:18px">
+        <div style="font-size:14px;font-weight:800;color:var(--text);margin-bottom:14px">🚀 Масштабирование: сеть клубов</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Клубов</th>
+              <th>GMV/мес</th>
+              <th>Выручка WS</th>
+              <th>ARR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>13 (PRIME)</td>
+              <td>$23K</td>
+              <td>$1 872</td>
+              <td>$22K</td>
+            </tr>
+            <tr>
+              <td>50</td>
+              <td>$90K</td>
+              <td>$7 200</td>
+              <td>$86K</td>
+            </tr>
+            <tr>
+              <td>200</td>
+              <td>$360K</td>
+              <td>$28 800</td>
+              <td>$345K</td>
+            </tr>
+            <tr class="highlight">
+              <td>500+</td>
+              <td>$900K</td>
+              <td>$72 000</td>
+              <td style="color:var(--yellow);font-weight:900">$864K</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="insight" style="margin-top:12px">
+          <span>🔑 Ключевое:</span> каждый новый клуб — нулевые переменные затраты. Всё масштабирование через продажи B2B, а не разработку.
+        </div>
+      </div>
+    </div>
+
+    <!-- Дополнительные точки роста -->
+    <div class="card" style="padding:18px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">⚡ Скрытые точки роста GMV</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+        <div style="background:rgba(139,92,246,0.07);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">🏆</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Турниры со скинами</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Призы = скины → рост вовлечённости и GMV на 20–30%</div>
+        </div>
+        <div style="background:rgba(139,92,246,0.07);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">📦</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Кейс-опенинг промо</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Пик-часы → рост конверсии до 15%+</div>
+        </div>
+        <div style="background:rgba(139,92,246,0.07);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:18px;margin-bottom:4px">🔄</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Рекуррентность</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px">Геймер возвращается в клуб ради скин-сделок +20% визитов</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">500 клубов дают ARR $864K при нулевых доп.затратах — чистая scale-модель через B2B-продажи. Каждый новый клуб = +$1 728/год выручки автоматически.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 03a — КАК РАБОТАЕТ ИНТЕГРАЦИЯ ══════════════════════════════ -->
+<div class="slide" id="slide-4">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">03a</span>
+      <h2 class="slide-title">Как работает <span>интеграция</span> — 48 часов до первой сделки</h2>
+    </div>
+
+    <!-- Flow Diagram -->
+    <div style="margin-bottom:20px">
+      <div class="flow">
+        <div class="flow-step">
+          <div class="flow-icon">🤝</div>
+          <div class="flow-step-title">Договор</div>
+          <div class="flow-step-sub">Rev-share модель, выбор тарифа</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">⚙️</div>
+          <div class="flow-step-title">Установка ПО</div>
+          <div class="flow-step-sub">Steam API, клиент на ПК клуба</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:rgba(139,92,246,0.12)">
+          <div class="flow-icon">🔗</div>
+          <div class="flow-step-title">Steam интеграция</div>
+          <div class="flow-step-sub">Trade Offer API, escrow</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-icon">💳</div>
+          <div class="flow-step-title">Локальные платежи</div>
+          <div class="flow-step-sub">Kaspi, RU-карты, крипта</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" style="background:rgba(34,197,94,0.08);border-color:rgba(34,197,94,0.3)">
+          <div class="flow-icon">🚀</div>
+          <div class="flow-step-title">Первая сделка</div>
+          <div class="flow-step-sub">Клуб получает rev-share</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:8px;font-size:12px;color:var(--text-muted)">⏱ Весь цикл: <strong style="color:var(--purple-pale)">48 часов</strong> от подписания до первой транзакции</div>
+    </div>
+
+    <!-- 3 модели подключения -->
+    <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:12px">🎮 3 модели подключения — клуб выбирает сам</div>
+    <div class="g3" style="margin-bottom:16px">
+      <div class="card" style="padding:16px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <div style="font-size:20px">📌</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text)">Базовый</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6">QR-стикеры на ПК. Клуб получает <span style="color:var(--purple-pale);font-weight:700">20–30%</span> от комиссии. Ноль вложений.</div>
+        <div class="tag tag-purple" style="margin-top:10px">старт</div>
+      </div>
+      <div class="card card-purple" style="padding:16px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <div style="font-size:20px">🖥️</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text)">Ко-брендинг</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6">WinSkin Corner — экран с ценами, брендинг зоны. Клуб получает <span style="color:var(--purple-pale);font-weight:700">35–40%</span>.</div>
+        <div class="tag tag-yellow" style="margin-top:10px">рекомендуем</div>
+      </div>
+      <div class="card" style="padding:16px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <div style="font-size:20px">🏆</div>
+          <div style="font-size:14px;font-weight:800;color:var(--text)">Амбассадор</div>
+        </div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.6">Клуб продвигает WinSkin среди игроков. <span style="color:var(--purple-pale);font-weight:700">45–50%</span> + фикс. Приоритет на промо.</div>
+        <div class="tag tag-green" style="margin-top:10px">максимум</div>
+      </div>
+    </div>
+
+    <!-- Как работает сделка -->
+    <div class="card" style="padding:18px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">🔒 Как защищена каждая сделка (Steam Escrow)</div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div style="background:rgba(139,92,246,0.08);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">1. Продавец ставит скин на продажу</div>
+        <div style="color:var(--purple);font-size:16px">→</div>
+        <div style="background:rgba(139,92,246,0.08);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">2. Скин блокируется в Steam Escrow</div>
+        <div style="color:var(--purple);font-size:16px">→</div>
+        <div style="background:rgba(139,92,246,0.08);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--text)">3. Покупатель платит локально</div>
+        <div style="color:var(--purple);font-size:16px">→</div>
+        <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:var(--green)">4. Скин переходит автоматически ✓</div>
+      </div>
+      <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">WinSkin и клуб не держат активы — все транзакции на уровне Steam API. Полная защита обеих сторон.</div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">Интеграция за 48 часов, 3 гибкие модели rev-share, нулевые вложения для клуба. Барьер входа минимален — поэтому PRIME согласился немедленно.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 03b — ПОТЕНЦИАЛ РЫНКА ЦА ══════════════════════════════ -->
+<div class="slide" id="slide-5">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">03b</span>
+      <h2 class="slide-title">Центральная Азия: <span>3 500+ клубов</span> — прямой канал</h2>
+    </div>
+
+    <div class="g2" style="margin-bottom:18px">
+      <!-- Карта / визуализация -->
+      <div class="card" style="padding:18px">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px">📍 Распределение клубов по рынкам</div>
+        <div>
+          <div class="region-bar" style="padding:12px 0">
+            <div class="region-name" style="color:var(--text);font-weight:700">🇰🇿 Казахстан</div>
+            <div class="region-bar-wrap"><div class="region-bar-fill" style="width:75%;background:var(--gradient)"></div></div>
+            <div class="region-val">1 600+</div>
+          </div>
+          <div class="region-bar" style="padding:12px 0">
+            <div class="region-name">🇺🇿 Узбекистан</div>
+            <div class="region-bar-wrap"><div class="region-bar-fill" style="width:55%;background:linear-gradient(90deg,rgba(139,92,246,0.7),rgba(139,92,246,0.4))"></div></div>
+            <div class="region-val">1 100+</div>
+          </div>
+          <div class="region-bar" style="padding:12px 0">
+            <div class="region-name">🇰🇬 Кыргызстан</div>
+            <div class="region-bar-wrap"><div class="region-bar-fill" style="width:25%;background:linear-gradient(90deg,rgba(139,92,246,0.6),rgba(139,92,246,0.3))"></div></div>
+            <div class="region-val">400+</div>
+          </div>
+          <div class="region-bar" style="padding:12px 0">
+            <div class="region-name">🌏 Прочие ЦА</div>
+            <div class="region-bar-wrap"><div class="region-bar-fill" style="width:20%;background:linear-gradient(90deg,rgba(139,92,246,0.4),rgba(139,92,246,0.2))"></div></div>
+            <div class="region-val">400+</div>
+          </div>
+          <div class="region-bar" style="padding:12px 0;border-bottom:none">
+            <div class="region-name" style="color:var(--purple-pale);font-weight:800">📊 ИТОГО ЦА</div>
+            <div class="region-bar-wrap"><div class="region-bar-fill" style="width:100%;background:var(--gradient)"></div></div>
+            <div class="region-val" style="color:var(--purple-pale)">3 500+</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Фазы экспансии -->
+      <div class="card" style="padding:18px">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:14px">🗺️ Стратегия экспансии по фазам</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-circle">1</div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-content">
+              <div class="tl-time">Старт (м. 1–6)</div>
+              <div class="tl-title">13 клубов PRIME + Астана/Алматы</div>
+              <div class="tl-desc">Пилот с реальными данными. Дархан Телманов лично проводит B2B-встречи с владельцами клубов.</div>
+              <div class="tl-benefit">✓ Гарантированный партнёр уже есть</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-circle">2</div>
+              <div class="tl-line"></div>
+            </div>
+            <div class="tl-content">
+              <div class="tl-time">Фаза 1 (м. 6–18)</div>
+              <div class="tl-title">50–200 клубов — весь Казахстан</div>
+              <div class="tl-desc">Сарафанное радио через кейс PRIME. B2B-сейлз по регионам.</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-left">
+              <div class="tl-circle">3</div>
+            </div>
+            <div class="tl-content">
+              <div class="tl-time">Фаза 2 (м. 18–36)</div>
+              <div class="tl-title">500+ клубов — ЦА + СНГ</div>
+              <div class="tl-desc">Узбекистан, Кыргызстан, Россия, Беларусь. Локализация под каждый рынок.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g3" style="margin-bottom:16px">
+      <div class="card card-purple" style="padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--purple-pale)">13</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Клубов PRIME — запускаем уже сейчас</div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--yellow)">1 600+</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Клубов в Казахстане — Фаза 1</div>
+      </div>
+      <div class="card" style="padding:16px;text-align:center">
+        <div style="font-size:28px;font-weight:900;color:var(--green)">3 500+</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Суммарно в Центральной Азии</div>
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">3 500 клубов ЦА — это 3 500 готовых точек продаж без аренды и маркетинга. Каждая продажа B2B = постоянный пассивный доход. Ни у одного конкурента такого канала нет.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 04 — МАРКЕТИНГ ══════════════════════════════ -->
+<div class="slide" id="slide-6">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">04</span>
+      <h2 class="slide-title">Маркетинг: <span>4 канала</span> — офлайн + вирал</h2>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px">
+      <div class="mkt-channel">
+        <div class="mkt-channel-head">
+          <div class="mkt-icon">🎙️</div>
+          <div class="mkt-title">Инфлюенс: длинный хвост</div>
+        </div>
+        <div class="mkt-item">Скупка интеграций у микростримеров (50–300 онлайн)</div>
+        <div class="mkt-item">Пожизненный RevShare с каждой сделки рефералов</div>
+        <div class="mkt-item">Партнёрский кабинет с real-time статистикой</div>
+        <div class="mkt-item">TikTok / Shorts: «Собрал инвентарь на $100 трейдом»</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--purple-pale);font-weight:600">📊 Ожидаемый охват: 500K+ мес. при бюджете $5K</div>
+      </div>
+      <div class="mkt-channel">
+        <div class="mkt-channel-head">
+          <div class="mkt-icon">📱</div>
+          <div class="mkt-title">Виральный контент</div>
+        </div>
+        <div class="mkt-item">Telegram / VK / Twitter паблики с мемами CS2</div>
+        <div class="mkt-item">На каждом меме — плашка WinSkin + промокод</div>
+        <div class="mkt-item">Посев через геймерские сообщества СНГ</div>
+        <div class="mkt-item">Диалоги в комментах: «Откуда нож?» → «WinSkin»</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--purple-pale);font-weight:600">📊 Стоимость контакта: &lt;$0.02 при вирал-механике</div>
+      </div>
+      <div class="mkt-channel">
+        <div class="mkt-channel-head">
+          <div class="mkt-icon">🖥️</div>
+          <div class="mkt-title">Офлайн в клубах PRIME</div>
+        </div>
+        <div class="mkt-item">Брендированные lock-screen и обои на каждом ПК</div>
+        <div class="mkt-item">QR на рабочем столе: «Отсканируй → $3 на скины»</div>
+        <div class="mkt-item">Розыгрыши скинов среди онлайн-игроков</div>
+        <div class="mkt-item">Кейс на vc.ru: «Как PRIME зарабатывает +15%»</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--green);font-weight:600">✓ 0 руб. доп.затрат — инфраструктура уже есть</div>
+      </div>
+      <div class="mkt-channel">
+        <div class="mkt-channel-head">
+          <div class="mkt-icon">🏆</div>
+          <div class="mkt-title">Турниры и амбассадоры</div>
+        </div>
+        <div class="mkt-item">Еженедельные турниры 1х1, 2х2. Призы — скины</div>
+        <div class="mkt-item">Вход на турнир = регистрация на маркете</div>
+        <div class="mkt-item">Амбассадор стримит покупки на WinSkin</div>
+        <div class="mkt-item">SEO-блог: «Как инвестировать в наклейки CS2»</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--yellow);font-weight:600">📊 CAC турниры: $2–5 vs $15–30 обычный таргет</div>
+      </div>
+    </div>
+
+    <!-- Почему это работает -->
+    <div class="hl-box" style="margin-bottom:14px">
+      <div class="hl-box-title">Почему это работает в ЦА: стандартный таргет заблокирован для скин-ниши</div>
+      <div class="hl-box-sub">CS.MONEY, DMarket, SkinCashier выросли именно на партизанском маркетинге + инфлюенсерах. WinSkin добавляет к этому эксклюзивный офлайн-трафик 3 500+ клубов.</div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">4 канала работают синергетически: офлайн-присутствие в клубах даёт доверие, инфлюенс — охват, турниры — регистрации, вирал — стоимость привлечения ниже $3.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 05 — КОНКУРЕНТЫ ══════════════════════════════ -->
+<div class="slide" id="slide-7">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">05</span>
+      <h2 class="slide-title">Конкурентный ландшафт: <span>мы единственные в своей нише</span></h2>
+    </div>
+
+    <div class="table-scroll" style="border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px">
+      <table>
+        <thead>
+          <tr>
+            <th>Платформа</th>
+            <th>Офлайн-дистрибуция</th>
+            <th>Фокус СНГ/ЦА</th>
+            <th>Steam API</th>
+            <th>Локальные платежи</th>
+            <th>Rev-share клубу</th>
+            <th>Комиссия</th>
+            <th>Барьер входа</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="highlight" style="background:rgba(139,92,246,0.1)">
+            <td style="font-weight:900;color:var(--purple-pale)">⭐ WinSkin</td>
+            <td class="c-yes">✓ PRIME 13+</td>
+            <td class="c-yes">✓ ЦА первый</td>
+            <td class="c-yes">✓</td>
+            <td class="c-yes">✓ KZ/UZ/RU</td>
+            <td class="c-yes">✓ 30–50%</td>
+            <td class="c-purple">5–10%</td>
+            <td class="c-yes">Низкий</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-weight:600">Steam Market</td>
+            <td class="c-no">✗ Нет</td>
+            <td class="c-no">✗ Нет</td>
+            <td class="c-yes">✓</td>
+            <td class="c-no">✗</td>
+            <td class="c-no">✗</td>
+            <td style="color:var(--red);font-weight:700">15%</td>
+            <td class="c-no">Высокий</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-weight:600">DMarket</td>
+            <td class="c-no">✗</td>
+            <td class="c-partial">~ СНГ</td>
+            <td class="c-yes">✓</td>
+            <td class="c-partial">~ Частично</td>
+            <td class="c-no">✗</td>
+            <td>~2%</td>
+            <td class="c-partial">Средний</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-weight:600">CS.MONEY</td>
+            <td class="c-no">✗</td>
+            <td class="c-partial">~ СНГ</td>
+            <td class="c-yes">✓</td>
+            <td class="c-partial">~ Частично</td>
+            <td class="c-no">✗</td>
+            <td>3–5%</td>
+            <td class="c-partial">Средний</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-weight:600">Buff163</td>
+            <td class="c-no">✗</td>
+            <td class="c-no">✗ Китай</td>
+            <td class="c-yes">✓</td>
+            <td class="c-no">✗</td>
+            <td class="c-no">✗</td>
+            <td>~2.5%</td>
+            <td class="c-no">Высокий (язык)</td>
+          </tr>
+          <tr>
+            <td style="color:var(--text);font-weight:600">Skinport</td>
+            <td class="c-no">✗</td>
+            <td class="c-no">✗ EU</td>
+            <td class="c-yes">✓</td>
+            <td class="c-no">✗ EU карты</td>
+            <td class="c-no">✗</td>
+            <td>6–8%</td>
+            <td class="c-partial">Средний</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Выводы -->
+    <div class="g3" style="margin-bottom:14px">
+      <div class="insight">
+        <div>🏆 <span>Единственные с офлайн-каналом.</span> Ни DMarket, ни CS.MONEY, ни Steam не имеют физической дистрибуции. WinSkin создаёт нишу, которой не существовало.</div>
+      </div>
+      <div class="insight">
+        <div>📍 <span>Глубокая локализация СНГ.</span> Русский интерфейс + Kaspi/карты KZ/UZ-банков + крипта. Buff163 недоступен, EU-платформы — без локальных платежей.</div>
+      </div>
+      <div class="insight">
+        <div>💰 <span>Rev-share = уникальный B2B-стимул.</span> Ни один конкурент не делится доходом с клубами. Это прямой аргумент для 3 500 владельцев клубов подключиться.</div>
+      </div>
+
+      <div class="slide-sources">
+        <b>Комиссии верифицированы:</b>
+        DMarket 2% — support.dmarket.com &nbsp;·&nbsp;
+        Buff163 2.5% — CSGOSKINS.gg &nbsp;·&nbsp;
+        CS.MONEY 3–5% — cs.money/price-policy &nbsp;·&nbsp;
+        Skinport 6–8% — skinport.com/blog &nbsp;·&nbsp;
+        Steam 15% — Steam Community Market FAQ (help.steampowered.com)
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">WinSkin — единственная платформа: офлайн-дистрибуция + локализация СНГ + rev-share для партнёров. Это не конкуренция с DMarket — это новая категория.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 06 — ВОПРОСЫ ИНВЕСТОРА ══════════════════════════════ -->
+<div class="slide" id="slide-8">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">06</span>
+      <h2 class="slide-title">Ключевые вопросы <span>инвестора</span> — прямые ответы</h2>
+    </div>
+
+    <div class="qa-grid-2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">01</span>Почему клубы будут устанавливать WinSkin?</div>
+        <div class="qa-a">Новая статья дохода без вложений — WinSkin на уже работающих ПК. Rev-share с каждой сделки, рост времени присутствия игрока. PRIME (13 клубов) уже подтвердил интерес. Нулевые затраты на первые партнёрства.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">02</span>Почему игроки будут торговать через WinSkin, а не дома?</div>
+        <div class="qa-a">Импульс к сделке возникает после матча — в клубе. WinSkin встроен в среду, не требует переключения устройств. Часть ЦА не имеет удобного доступа к зарубежным платёжным системам. Локальные платежи решают это.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">03</span>Куда пойдут $500K и когда будет продукт?</div>
+        <div class="qa-a">$180–200K — MVP (Steam API, p2p механика, клиент), $150K — запуск в PRIME (13 клубов), $150K — команда и операционка. MVP через 3–4 мес. после закрытия раунда. <strong style="color:var(--yellow)">Альтернатива: 2 транша — $200K (MVP + 3–5 клубов), $300K — при ≥500 транзакций/мес и 10+ клубов.</strong></div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">04</span>Как защищена сделка от мошенничества?</div>
+        <div class="qa-a">Escrow через Steam Trade Offer API: скин блокируется до оплаты, затем переводится автоматически. WinSkin и клуб не держат активы. Верификация Steam-аккаунтов + физическое присутствие оператора в клубе.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">05</span>Почему 5–10% комиссия — не Steam и не Buff163?</div>
+        <div class="qa-a">Steam — 15%, дорого. Buff163 — 2.5%, но китайский интерфейс, нет локальных платежей, недоступен. WinSkin — 5–10% с офлайн-каналом и локализацией. Не конкурируем с глобальными платформами — занимаем уникальную нишу.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">06</span>Какова стратегия выхода для инвестора?</div>
+        <div class="qa-a">Основные сценарии: стратегическая продажа крупной игровой платформе (DMarket, Valve-экосистема, Tencent-партнёры) или Series A через 18–24 мес. при выходе на 200+ клубов и ARR $350K+.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">07</span>Может ли Valve/Steam заблокировать WinSkin?</div>
+        <div class="qa-a">Steam Trade API — публичный инструмент, использующийся всеми p2p-платформами (DMarket, Skinport, Buff163). Valve не блокирует p2p-торговлю — это противоречило бы их политике. Риск регуляторный, а не технический.</div>
+      </div>
+      <div class="qa-item">
+        <div class="qa-q"><span class="qa-q-num">08</span>Какие ключевые риски и как вы их митигируете?</div>
+        <div class="qa-a">1) Скорость подключения клубов — митигация: кейс PRIME + прямые продажи Дархана. 2) Конкуренты копируют модель — митигация: первый = сеть эффект, контракты. 3) API риск — митигация: диверсификация на Rust/Dota скины.</div>
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">На все ключевые возражения у нас есть конкретные ответы с цифрами. Риски реальные, но управляемые — и у каждого есть понятный план митигации.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 07 — СТРАТЕГИЧЕСКОЕ ПАРТНЁРСТВО ══════════════════════════════ -->
+<div class="slide" id="slide-9">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">07</span>
+      <h2 class="slide-title">Стратегические <span>партнёрства</span> — сила за спиной</h2>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px">
+      <div class="partner-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div class="partner-icon">🐉</div>
+          <div>
+            <div class="partner-title">Tencent-партнёр №1 в СНГ</div>
+            <div class="tag tag-yellow" style="margin-top:4px">стратегический</div>
+          </div>
+        </div>
+        <div class="partner-bullet">Прямой контакт с крупнейшим игровым конгломератом мира (Fortnite, LOL, Valorant)</div>
+        <div class="partner-bullet">Закупка контента ниже рынка через официальный канал</div>
+        <div class="partner-bullet">Ранние инсайды о трендах — опережение конкурентов на 2–3 мес.</div>
+        <div class="partner-bullet">Возможность совместных промо-кампаний и эксклюзивных скинов</div>
+      </div>
+      <div class="partner-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div class="partner-icon" style="background:linear-gradient(135deg,#6d28d9,#1d4ed8)">🎬</div>
+          <div>
+            <div class="partner-title">Meta Frame — ИИ-продакшн</div>
+            <div class="tag tag-purple" style="margin-top:4px">медиа</div>
+          </div>
+        </div>
+        <div class="partner-bullet">8+ лет в съёмках кино, сериалов, клипов — внутренний продакшн</div>
+        <div class="partner-bullet">Специалисты из Higgsfield, Top-1 AI Creator мирового уровня</div>
+        <div class="partner-bullet">Весь контент для WinSkin и соцсетей PRIME — без внешних затрат</div>
+        <div class="partner-bullet">Уникальный вирал-контент: дроп-шоу, анбоксинг, турнирные трансляции</div>
+      </div>
+      <div class="partner-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div class="partner-icon" style="background:linear-gradient(135deg,#b45309,#92400e)">🔒</div>
+          <div>
+            <div class="partner-title">Команда кибербезопасности</div>
+            <div class="tag tag-red" style="margin-top:4px">безопасность</div>
+          </div>
+        </div>
+        <div class="partner-bullet">7+ лет в кибербезопасности — защита финтех-уровня</div>
+        <div class="partner-bullet">Шифрование транзакций, anti-fraud система, защита Steam API</div>
+        <div class="partner-bullet">Аудит платформы до запуска — доверие пользователей с дня 1</div>
+      </div>
+      <div class="partner-card" style="border-color:rgba(251,191,36,0.35);background:rgba(251,191,36,0.04)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">
+          <div class="partner-icon" style="background:linear-gradient(135deg,#d97706,#b45309)">🏆</div>
+          <div>
+            <div class="partner-title">PRIME GameHub — первый клиент</div>
+            <div class="tag tag-yellow" style="margin-top:4px">запуск</div>
+          </div>
+        </div>
+        <div class="partner-bullet">13 клубов — готовая база для пилота и реальных данных</div>
+        <div class="partner-bullet">Многофункциональный маркетплейс + полное медиа-партнёрство</div>
+        <div class="partner-bullet">PRIME зарабатывает пассивно — живой кейс для остальных 3 487 клубов</div>
+        <div class="partner-bullet">Дархан Телманов лично показывает цифры другим клубам</div>
+      </div>
+    </div>
+
+    <!-- Синергия схема -->
+    <div class="card" style="padding:18px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">⚡ Синергия партнёрств → конкурентный ров</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap">
+        <div style="text-align:center;padding:12px 18px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;min-width:120px">
+          <div style="font-size:20px">🐉</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-top:4px">Tencent</div>
+          <div style="font-size:11px;color:var(--text-muted)">Контент + тренды</div>
+        </div>
+        <div style="font-size:18px;color:var(--purple);padding:0 8px">+</div>
+        <div style="text-align:center;padding:12px 18px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;min-width:120px">
+          <div style="font-size:20px">🎬</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-top:4px">Meta Frame</div>
+          <div style="font-size:11px;color:var(--text-muted)">Вирал-контент</div>
+        </div>
+        <div style="font-size:18px;color:var(--purple);padding:0 8px">+</div>
+        <div style="text-align:center;padding:12px 18px;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;min-width:120px">
+          <div style="font-size:20px">🔒</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);margin-top:4px">Cybersec</div>
+          <div style="font-size:11px;color:var(--text-muted)">Доверие</div>
+        </div>
+        <div style="font-size:18px;color:var(--purple);padding:0 8px">+</div>
+        <div style="text-align:center;padding:12px 18px;background:rgba(251,191,36,0.08);border:1px solid rgba(251,191,36,0.3);border-radius:10px;min-width:120px">
+          <div style="font-size:20px">🏆</div>
+          <div style="font-size:12px;font-weight:700;color:var(--yellow);margin-top:4px">PRIME</div>
+          <div style="font-size:11px;color:var(--text-muted)">Дистрибуция</div>
+        </div>
+        <div style="font-size:18px;color:var(--purple);padding:0 8px">=</div>
+        <div style="text-align:center;padding:14px 20px;background:var(--gradient);border-radius:10px;min-width:140px">
+          <div style="font-size:20px">🚀</div>
+          <div style="font-size:13px;font-weight:900;color:#fff;margin-top:4px">WinSkin</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.8)">Unfair advantage</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">4 партнёрства = полный стек без аутсорса: контент, медиа, безопасность и первая B2B-база. Конкуренту понадобятся годы, чтобы собрать аналогичный пул.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 08 — СЛЕДУЮЩИЕ ШАГИ ══════════════════════════════ -->
+<div class="slide" id="slide-10">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">08</span>
+      <h2 class="slide-title">Следующие шаги — <span>действия и результаты</span></h2>
+    </div>
+
+    <div class="timeline" style="margin-bottom:18px">
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-circle">1</div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-time">Неделя 1–2</div>
+          <div class="tl-title">Подписание условий: rev-share, выбор пилотных клубов PRIME</div>
+          <div class="tl-desc">Фиксируем параметры партнёрства, выбираем 3–5 наиболее активных филиалов для пилота. Юридическая документация готова.</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <div class="tl-benefit">✓ Результат: Договор на руках, дата старта зафиксирована</div>
+            <div class="tl-benefit" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:var(--purple-pale)">→ Для инвестора: юр.чистота</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-circle">2</div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-time">Неделя 2–6</div>
+          <div class="tl-title">Разработка MVP: Steam API + p2p механика + локальные платежи</div>
+          <div class="tl-desc">Команда из 3 разработчиков. Итеративные спринты. Интеграция Kaspi Pay, RU/KZ-карты, crypto gateway. QA на реальных аккаунтах Steam.</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <div class="tl-benefit">✓ Результат: Рабочий продукт на 5 ПК PRIME</div>
+            <div class="tl-benefit" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:var(--purple-pale)">→ Milestone Транш 1</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-circle">3</div>
+          <div class="tl-line"></div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-time">Неделя 4–16 (60-дневный пилот)</div>
+          <div class="tl-title">Запуск в 13 клубах PRIME: полная аналитика и оптимизация</div>
+          <div class="tl-desc">Отслеживаем: конверсию, средний чек, частоту транзакций, retention. Обратная связь от игроков. Итерируем UX каждые 2 недели.</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <div class="tl-benefit">✓ Результат: Реальные данные GMV, CAC, LTV</div>
+            <div class="tl-benefit" style="background:rgba(251,191,36,0.1);border-color:rgba(251,191,36,0.25);color:var(--yellow)">→ Proof of concept для рынка</div>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-left">
+          <div class="tl-circle">4</div>
+        </div>
+        <div class="tl-content">
+          <div class="tl-time">Месяц 4–12</div>
+          <div class="tl-title">Масштабирование: 50–200 клубов Казахстана + подготовка к Серии A</div>
+          <div class="tl-desc">B2B-продажи по Астане, Алматы, регионам. Кейс PRIME как главный инструмент продаж. Целевой ARR $86–345K к концу года.</div>
+          <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <div class="tl-benefit">✓ Результат: ARR $86K+ (50 клубов) → $345K (200 клубов)</div>
+            <div class="tl-benefit" style="background:rgba(139,92,246,0.1);border-color:rgba(139,92,246,0.25);color:var(--purple-pale)">→ Milestone Транш 2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Use of funds -->
+    <div class="card card-purple" style="padding:18px;margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:12px">💰 Использование $500K Pre-Seed</div>
+      <div style="display:flex;gap:12px">
+        <div style="flex:1.2;background:rgba(139,92,246,0.12);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--purple-pale)">$200K</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">⚙️ Разработка MVP<br>+ интеграции</div>
+        </div>
+        <div style="flex:1;background:rgba(34,197,94,0.08);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--green)">$150K</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">🏪 Запуск<br>в 13 клубах PRIME</div>
+        </div>
+        <div style="flex:1;background:rgba(251,191,36,0.06);border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:22px;font-weight:900;color:var(--yellow)">$150K</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-top:4px">👥 Команда<br>и операционка</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">💡</div>
+      <div class="slide-conclusion-text">4 конкретных шага с измеримыми результатами. $500K дают: MVP + пилот + первые реальные данные GMV — всё что нужно для Серии A через 12 месяцев.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ SLIDE 09 — ИТОГИ ДЛЯ ИНВЕСТОРА ══════════════════════════════ -->
+<div class="slide" id="slide-11">
+  <div class="slide-inner">
+    <div class="slide-header">
+      <span class="slide-num">09</span>
+      <h2 class="slide-title">Итоги для инвестора — <span>почему сейчас и почему мы</span></h2>
+    </div>
+
+    <div class="g2" style="margin-bottom:16px">
+      <div class="summary-item">
+        <div class="summary-icon">🏆</div>
+        <div class="summary-content">
+          <div class="summary-title">Гарантированный старт: 13 клубов PRIME уже ждут</div>
+          <div class="summary-desc">Нет типичного риска «кто первый клиент» — PRIME GameHub уже договорился. Первые данные GMV через 3–4 мес. после закрытия раунда. Нулевые затраты на первые продажи.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">📊</div>
+        <div class="summary-content">
+          <div class="summary-title">Рынок ~$1.2B в СНГ — 3 500 точек без офлайн-конкурентов</div>
+          <div class="summary-desc">Ни один игрок не занял офлайн-нишу в СНГ. SAM ~$1.2B (расчёт: 15% от TAM ~$8B, FutureDataStats 2024). 3 500 клубов ЦА — незанятый канал. Steam теряет игроков из-за 15% комиссии — мы предлагаем альтернативу.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">💰</div>
+        <div class="summary-content">
+          <div class="summary-title">Понятная unit-экономика: $1 728/год с каждого клуба</div>
+          <div class="summary-desc">500 клубов → ARR $864K при нулевых переменных затратах. Масштабирование только через B2B-продажи. Гибкая структура: доступна двухтраншевая модель $200K + $300K при достижении milestones.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">🚀</div>
+        <div class="summary-content">
+          <div class="summary-title">Стратегия: пилот → данные → Серия A за 12–18 мес.</div>
+          <div class="summary-desc">Pre-Seed $500K → MVP + пилот 13 клубов → реальные метрики → Серия A. Чёткий путь с проверяемыми milestones на каждом этапе.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">🔒</div>
+        <div class="summary-content">
+          <div class="summary-title">Управляемые риски — у каждого есть ответ</div>
+          <div class="summary-desc">Steam API: публичный инструмент, Valve не блокирует p2p. Конкуренты: первый → сетевой эффект + контракты. Adoption: кейс PRIME + личные продажи Дархана. Мошенничество: Steam Escrow защищает обе стороны.</div>
+        </div>
+      </div>
+      <div class="summary-item">
+        <div class="summary-icon">🤝</div>
+        <div class="summary-content">
+          <div class="summary-title">Партнёрская экосистема = unfair advantage</div>
+          <div class="summary-desc">Tencent (контент), Meta Frame (медиа), Cybersec-команда (безопасность) + PRIME (дистрибуция). Полный стек без аутсорса — конкурент будет собирать его годами.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Final CTA -->
+    <div style="background:radial-gradient(ellipse 100% 200% at 50% 50%, rgba(139,92,246,0.2) 0%, transparent 70%), var(--bg3);border:1px solid rgba(139,92,246,0.4);border-radius:16px;padding:28px;text-align:center;margin-bottom:14px">
+      <div style="font-size:28px;font-weight:900;color:var(--text);margin-bottom:8px">
+        $500K Pre-Seed · <span style="color:var(--purple-pale)">Раунд открыт</span>
+      </div>
+      <div style="font-size:16px;color:var(--text-muted);margin-bottom:18px">
+        Минимум риска. Максимум потенциала. Первый офлайн-маркетплейс скинов в ЦА.
+      </div>
+      <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap">
+        <div style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.35);border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;color:var(--purple-pale)">📧 winskin@gmail.com</div>
+        <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;color:var(--green)">✓ PRIME GameHub готов к старту</div>
+        <div style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;color:var(--yellow)">🎯 MVP через 3–4 месяца</div>
+      </div>
+    </div>
+
+    <div class="slide-conclusion">
+      <div class="slide-conclusion-icon">🏆</div>
+      <div class="slide-conclusion-text">Первый офлайн-маркетплейс скинов в СНГ · Гарантированный партнёр · Понятная экономика · Управляемые риски · ~$1.2B рынок СНГ · нет ни одного офлайн-конкурента · TAM глобально ~$8B (FutureDataStats 2024).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MOBILE BOTTOM NAV ═══════════════════════ -->
+<div class="mobile-nav-bar" id="mobileBar">
+  <button class="nav-btn" onclick="prevSlide()" style="width:40px;height:40px;font-size:20px">‹</button>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1">
+    <div style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center" id="mobileDots"></div>
+    <div style="font-size:11px;color:var(--text-muted);font-weight:600" id="mobileCounter">1 / 11</div>
+  </div>
+  <button class="nav-btn" onclick="nextSlide()" style="width:40px;height:40px;font-size:20px">›</button>
+</div>
+
+<!-- ═══════════════════════════════════ JS ═══════════════════════════════════ -->
+<script>
+  const TOTAL = 11;
+  let current = 0;
+
+  const slides = Array.from({length: TOTAL}, (_, i) =>
+    document.getElementById(i === 0 ? 'slide-0' : `slide-${i}`)
+  );
+  const dotsContainer  = document.getElementById('navDots');
+  const counter        = document.getElementById('navCounter');
+  const mobileDotsWrap = document.getElementById('mobileDots');
+  const mobileCounter  = document.getElementById('mobileCounter');
+
+  // Build desktop dots
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('button');
+    d.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsContainer.appendChild(d);
+  }
+
+  // Build mobile dots (smaller, round)
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('button');
+    d.style.cssText = `
+      width:8px; height:8px; border-radius:50%; border:none; cursor:pointer;
+      background:${i === 0 ? '#8b5cf6' : 'rgba(139,92,246,0.3)'};
+      transition:all 0.2s; padding:0;
+    `;
+    d.onclick = () => goTo(i);
+    mobileDotsWrap.appendChild(d);
+  }
+
+  function updateDots() {
+    [...dotsContainer.children].forEach((d, i) =>
+      d.classList.toggle('active', i === current)
+    );
+    [...mobileDotsWrap.children].forEach((d, i) =>
+      d.style.background = i === current ? '#8b5cf6' : 'rgba(139,92,246,0.3)'
+    );
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(TOTAL - 1, n));
+    slides[current].classList.add('active');
+    updateDots();
+    const label = `${current + 1} / ${TOTAL}`;
+    counter.textContent = label;
+    mobileCounter.textContent = label;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function nextSlide() { goTo(current + 1); }
+  function prevSlide() { goTo(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+  });
+
+  // Touch swipe
+  let tx = 0, ty = 0;
+  document.addEventListener('touchstart', e => {
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+  }, {passive: true});
+  document.addEventListener('touchend', e => {
+    const dx = tx - e.changedTouches[0].clientX;
+    const dy = ty - e.changedTouches[0].clientY;
+    // Only trigger if horizontal swipe dominates
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      dx > 0 ? nextSlide() : prevSlide();
+    }
+  }, {passive: true});
+</script>
+</body>
+</html>
