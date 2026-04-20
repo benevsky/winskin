@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>WinSkin — Опрос</title>
+<style>
+/* ── SHADCN-INSPIRED DESIGN TOKENS ── */
+:root {
+  --radius:0.5rem;
+  --background:#09090b;
+  --foreground:#fafafa;
+  --card:#18181b;
+  --card-fg:#fafafa;
+  --popover:#1c1c1f;
+  --popover-fg:#fafafa;
+  --primary:#8b5cf6;
+  --primary-fg:#ffffff;
+  --secondary:#27272a;
+  --secondary-fg:#fafafa;
+  --muted:#27272a;
+  --muted-fg:#a1a1aa;
+  --accent:#27272a;
+  --accent-fg:#fafafa;
+  --border:rgba(255,255,255,.08);
+  --input:rgba(255,255,255,.1);
+  --ring:#8b5cf6;
+  --destructive:#ef4444;
+  --violet:#8b5cf6;
+  --violet2:#a78bfa;
+  --violet3:#c4b5fd;
+  --gold:#f59e0b;
+  --grn:#10b981;
+}
+[data-theme="light"]{
+  --background:#ffffff;
+  --foreground:#09090b;
+  --card:#ffffff;
+  --card-fg:#09090b;
+  --popover:#ffffff;
+  --popover-fg:#09090b;
+  --primary:#7c3aed;
+  --primary-fg:#ffffff;
+  --secondary:#f4f4f5;
+  --secondary-fg:#09090b;
+  --muted:#f4f4f5;
+  --muted-fg:#71717a;
+  --accent:#f4f4f5;
+  --accent-fg:#09090b;
+  --border:#e4e4e7;
+  --input:#e4e4e7;
+  --ring:#7c3aed;
+  --destructive:#dc2626;
+  --violet:#7c3aed;
+  --violet2:#6d28d9;
+  --violet3:#4c1d95;
+  --gold:#b45309;
+  --grn:#059669;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-tap-highlight-color:transparent}
+body{
+  background:var(--background);color:var(--foreground);
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  min-height:100vh;font-size:16px;line-height:1.6;
+  transition:background .2s,color .2s;
+}
+
+/* TOP BAR */
+#top-bar{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:50px;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 16px;
+  background:color-mix(in srgb,var(--background) 82%,transparent);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-size:18px;font-weight:900;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#fff 0%,#c4b5fd 50%,#f59e0b 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+[data-theme="light"] .logo{
+  background:linear-gradient(135deg,#1e1b4b 0%,#7c3aed 55%,#b45309 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.bar-actions{display:flex;align-items:center;gap:4px}
+
+/* SHADCN ICON BUTTON */
+.icon-btn{
+  width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:var(--radius);border:1px solid var(--border);
+  background:transparent;cursor:pointer;color:var(--muted-fg);
+  transition:background .12s,color .12s;font-family:inherit;
+  position:relative;flex-shrink:0;
+}
+.icon-btn:hover{background:var(--accent);color:var(--foreground)}
+
+/* DROPDOWN */
+.dd-wrap{position:relative}
+.dd-menu{
+  position:absolute;top:calc(100% + 6px);right:0;
+  min-width:148px;padding:4px;
+  background:var(--popover);color:var(--popover-fg);
+  border:1px solid var(--border);border-radius:var(--radius);
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+  display:none;z-index:200;
+}
+.dd-menu.open{display:block;animation:ddIn .1s ease}
+@keyframes ddIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.dd-section{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-fg);padding:6px 8px 2px}
+.dd-sep{height:1px;background:var(--border);margin:3px 0}
+.dd-row{
+  display:flex;align-items:center;gap:8px;padding:6px 8px;
+  font-size:13px;font-weight:500;border-radius:calc(var(--radius) - 2px);
+  cursor:pointer;color:var(--foreground);background:none;
+  border:none;width:100%;font-family:inherit;
+  transition:background .08s;
+}
+.dd-row:hover{background:var(--accent)}
+.dd-row.active{color:var(--primary);font-weight:700}
+.dd-row svg{flex-shrink:0;opacity:.7}
+
+/* LAYOUT */
+.page{max-width:660px;margin:0 auto;padding:62px 14px 52px}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(245,158,11,.04));
+  border:1px solid rgba(139,92,246,.25);
+  border-radius:calc(var(--radius)*2);
+  padding:22px 18px;margin-bottom:22px;position:relative;overflow:hidden;
+}
+.hero::after{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,.13),transparent 70%);pointer-events:none}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);
+  border-radius:9999px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--gold);
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px;
+}
+.hero h1{font-size:clamp(19px,5vw,26px);font-weight:900;line-height:1.25;letter-spacing:-.4px;margin-bottom:6px}
+.hero h1 em{font-style:normal;color:var(--violet2)}
+.hero-sub{font-size:14px;color:var(--muted-fg);line-height:1.6;margin-bottom:16px}
+.prize-row{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);
+  border-radius:var(--radius);padding:9px 13px;
+}
+.prize-body{flex:1;min-width:0}
+.prize-body strong{display:block;color:var(--grn);font-size:14px;font-weight:700}
+.prize-body span{font-size:12px;color:var(--muted-fg)}
+.time-tag{
+  font-size:11px;font-weight:600;color:var(--muted-fg);
+  background:var(--secondary);border:1px solid var(--border);
+  border-radius:9999px;padding:3px 9px;white-space:nowrap;flex-shrink:0;
+}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:18px}
+.prog-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.prog-block{font-size:12px;font-weight:600;color:var(--violet2)}
+.prog-pct{font-size:11px;color:var(--muted-fg)}
+.prog-bar{height:3px;background:var(--secondary);border-radius:99px;overflow:hidden}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--violet),var(--violet2));border-radius:99px;transition:width .35s ease}
+.dots-row{display:flex;gap:2px;margin-top:5px;flex-wrap:wrap}
+.dot{height:3px;flex:1;min-width:6px;max-width:22px;border-radius:99px;background:var(--secondary);transition:background .2s}
+.dot.done{background:var(--violet)}
+.dot.now{background:var(--violet2)}
+
+/* SHADCN CARD */
+.card{
+  background:var(--card);color:var(--card-fg);
+  border:1px solid var(--border);
+  border-radius:calc(var(--radius)*1.5);
+  padding:24px;
+}
+@media(max-width:480px){.card{padding:18px 16px}}
+
+/* QUESTION CONTAINER */
+.q-wrap{margin-bottom:10px;animation:qIn .18s ease both}
+@keyframes qIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.q-meta{display:flex;align-items:center;gap:7px;margin-bottom:14px}
+.q-idx{font-size:11px;font-weight:700;color:var(--muted-fg);letter-spacing:.03em}
+.q-tag{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--violet2)}
+.q-text{font-size:clamp(14px,3.8vw,17px);font-weight:700;line-height:1.4;letter-spacing:-.2px;margin-bottom:8px}
+.q-hint{font-size:13px;color:var(--muted-fg);margin-bottom:18px;line-height:1.5}
+.q-req{color:var(--destructive);margin-left:2px}
+
+/* OPTIONS (SINGLE / MULTI) */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 15px;
+  background:var(--secondary);border:1px solid var(--border);
+  border-radius:var(--radius);cursor:pointer;
+  transition:border-color .1s,background .1s;
+  text-align:left;width:100%;font-family:inherit;
+  color:var(--foreground);font-size:14px;
+}
+.opt:hover{border-color:var(--violet);background:rgba(139,92,246,.08)}
+.opt.sel{border-color:var(--violet2);background:rgba(139,92,246,.12);font-weight:600}
+.o-circle{
+  width:16px;height:16px;min-width:16px;border-radius:50%;margin-top:3px;
+  border:2px solid var(--muted-fg);transition:all .1s;
+  display:flex;align-items:center;justify-content:center;
+}
+.opt.sel .o-circle{background:var(--violet);border-color:var(--violet)}
+.opt.sel .o-circle::after{content:'';width:5px;height:5px;border-radius:50%;background:#fff}
+.o-square{border-radius:4px!important}
+.opt.sel .o-square::after{content:'✓';font-size:9px;color:#fff;line-height:1}
+.o-body{flex:1;min-width:0;line-height:1.45}
+.o-sub{display:block;font-size:11px;color:var(--muted-fg);font-weight:400;margin-top:2px}
+
+/* SCALE */
+.scale-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted-fg);margin-bottom:5px}
+input[type=range]{
+  width:100%;-webkit-appearance:none;appearance:none;
+  height:4px;background:var(--secondary);border-radius:2px;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--violet);border:3px solid var(--background);
+  box-shadow:0 0 0 1px var(--violet);cursor:pointer;transition:transform .1s;
+}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
+input[type=range]:focus{outline:none}
+input[type=range]:focus::-webkit-slider-thumb{box-shadow:0 0 0 3px rgba(139,92,246,.3)}
+.scale-ticks{display:flex;justify-content:space-between;padding:3px 1px 0}
+.tick{width:2px;height:5px;background:var(--border);border-radius:1px}
+.scale-val{text-align:center;font-size:36px;font-weight:900;color:var(--violet2);margin:2px 0;line-height:1;font-variant-numeric:tabular-nums}
+.scale-desc{text-align:center;font-size:12px;color:var(--muted-fg);min-height:16px;margin-top:2px}
+
+/* LIKERT */
+.likert{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.likert-hd{
+  display:flex;align-items:center;
+  background:rgba(139,92,246,.08);padding:7px 12px;
+}
+.likert-hd-lbl{flex:1;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--violet2)}
+.lk-nums{display:flex;min-width:120px}
+.lk-num{flex:1;text-align:center;font-size:10px;font-weight:700;color:var(--muted-fg)}
+.likert-row{
+  display:flex;align-items:center;padding:9px 12px;
+  border-top:1px solid var(--border);gap:8px;
+  transition:background .08s;
+}
+.likert-row:hover{background:rgba(139,92,246,.04)}
+.lk-lbl{flex:1;font-size:13px;line-height:1.4;min-width:0}
+.lk-btns{display:flex;min-width:120px}
+.lk-btn{
+  flex:1;height:26px;border-radius:50%;border:1.5px solid var(--border);
+  background:transparent;cursor:pointer;font-size:10px;font-weight:700;
+  color:var(--muted-fg);transition:all .1s;display:flex;align-items:center;
+  justify-content:center;font-family:inherit;margin:0 1px;
+}
+.lk-btn:hover{border-color:var(--violet);color:var(--violet)}
+.lk-btn.on{background:var(--violet);border-color:var(--violet);color:#fff}
+
+/* IIN GRID */
+.iin-lbl{font-size:12px;font-weight:600;color:var(--muted-fg);margin-bottom:8px;display:block}
+.iin-grid{
+  display:grid;
+  gap:5px;align-items:center;
+  width:100%;
+}
+/* 12 cells + 1 separator = 13 cols on desktop, stacked on mobile */
+@media(min-width:380px){
+  .iin-grid{grid-template-columns:repeat(6,1fr) auto repeat(6,1fr)}
+}
+@media(max-width:379px){
+  .iin-grid{grid-template-columns:repeat(6,1fr)}
+  .iin-sep-col{display:none}
+}
+.iin-c{
+  aspect-ratio:1;width:100%;min-width:0;
+  text-align:center;padding:0;
+  font-size:clamp(13px,4vw,20px);font-weight:700;
+  font-family:'Courier New',monospace;
+  background:var(--secondary);border:1.5px solid var(--input);
+  border-radius:var(--radius);color:var(--foreground);
+  outline:none;transition:border-color .12s;
+}
+.iin-c:focus{border-color:var(--ring);box-shadow:0 0 0 2px rgba(139,92,246,.25)}
+.iin-c.filled{border-color:rgba(16,185,129,.5);background:rgba(16,185,129,.06)}
+.iin-c.ec{border-color:var(--destructive)!important}
+.iin-sep-col{
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:var(--muted-fg);
+}
+
+/* TEXT / TEXTAREA */
+.t-input{
+  width:100%;padding:9px 12px;border-radius:var(--radius);
+  border:1px solid var(--input);background:var(--secondary);
+  color:var(--foreground);font-size:14px;font-family:inherit;
+  outline:none;transition:border-color .12s;resize:vertical;
+}
+.t-input:focus{border-color:var(--ring);box-shadow:0 0 0 2px rgba(139,92,246,.2)}
+.t-input::placeholder{color:var(--muted-fg)}
+.t-input.terr{border-color:var(--destructive)!important}
+.char-ct{font-size:10px;color:var(--muted-fg);text-align:right;margin-top:3px}
+
+/* RANK */
+.rank-list{display:flex;flex-direction:column;gap:6px}
+.rank-item{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 12px;background:var(--secondary);
+  border:1px solid var(--border);border-radius:var(--radius);
+  cursor:grab;user-select:none;transition:border-color .1s,opacity .1s;
+}
+.rank-item:active{cursor:grabbing}
+.rank-item.dragging{border-color:var(--violet);opacity:.55}
+.rank-item.over{border-color:var(--violet2);border-style:dashed}
+.r-num{
+  width:22px;height:22px;min-width:22px;border-radius:50%;
+  background:rgba(139,92,246,.15);border:1px solid var(--border);
+  font-size:11px;font-weight:800;color:var(--violet2);
+  display:flex;align-items:center;justify-content:center;
+}
+.r-grip{color:var(--muted-fg);font-size:12px;flex-shrink:0}
+.r-txt{flex:1;font-size:13px}
+
+/* CONTACT */
+.contact-g{display:grid;gap:10px;grid-template-columns:1fr 1fr}
+@media(max-width:460px){.contact-g{grid-template-columns:1fr}}
+.c-lbl{font-size:12px;font-weight:600;color:var(--muted-fg);margin-bottom:4px;display:block}
+
+/* VALIDATION MESSAGE */
+.v-msg{
+  display:none;align-items:center;gap:6px;
+  padding:8px 12px;border-radius:var(--radius);margin-top:8px;
+  background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);
+  font-size:13px;color:var(--destructive);font-weight:600;
+}
+.v-msg.show{display:flex}
+
+/* FIELD ERROR */
+.f-err{font-size:11px;color:var(--destructive);margin-top:4px;display:none;font-weight:600}
+.f-err.show{display:block}
+
+/* NAV */
+.nav-row{display:flex;gap:8px;margin-top:14px;align-items:center}
+.nav-back{
+  padding:9px 15px;border:1px solid var(--border);border-radius:var(--radius);
+  background:transparent;color:var(--muted-fg);font-size:14px;
+  cursor:pointer;font-family:inherit;font-weight:500;transition:background .1s;flex-shrink:0;
+}
+.nav-back:hover{background:var(--accent);color:var(--foreground)}
+.nav-next{
+  flex:1;padding:11px 16px;border:none;border-radius:var(--radius);
+  background:var(--violet);color:#fff;font-size:15px;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:opacity .1s,transform .08s;
+}
+.nav-next:hover{opacity:.9}
+.nav-next:active{transform:scale(.99)}
+.nav-next.fin{background:linear-gradient(90deg,var(--violet),var(--gold));color:#fff}
+.nav-skip{
+  font-size:12px;color:var(--muted-fg);text-decoration:underline;cursor:pointer;
+  background:none;border:none;font-family:inherit;padding:4px;flex-shrink:0;
+}
+.nav-skip:hover{color:var(--foreground)}
+
+/* GATE */
+.gate{display:none}
+.gate.show{display:block;padding:20px 0}
+.gate-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:calc(var(--radius)*2);padding:36px 24px;text-align:center;
+}
+.gate-icon{font-size:48px;margin-bottom:14px}
+.gate-title{font-size:20px;font-weight:800;margin-bottom:8px}
+.gate-title.err{color:var(--destructive)}
+.gate-body{font-size:14px;color:var(--muted-fg);line-height:1.65;max-width:340px;margin:0 auto}
+
+/* RESULT */
+#result-screen{display:none;padding-bottom:36px}
+#result-screen.show{display:block;animation:qIn .25s ease}
+.res-hero{text-align:center;padding:16px 0 22px}
+.res-icon{font-size:50px;margin-bottom:10px}
+.res-hero h2{font-size:clamp(18px,5vw,22px);font-weight:900;margin-bottom:6px}
+.res-hero p{font-size:14px;color:var(--muted-fg);max-width:380px;margin:0 auto;line-height:1.6}
+.promo-card{
+  border:2px dashed rgba(139,92,246,.4);
+  border-radius:calc(var(--radius)*2);padding:20px;margin-bottom:14px;
+  background:linear-gradient(135deg,rgba(139,92,246,.07),rgba(245,158,11,.04));
+  text-align:center;
+}
+.promo-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted-fg);margin-bottom:7px}
+.promo-code{
+  font-size:clamp(18px,6vw,28px);font-weight:900;letter-spacing:.1em;word-break:break-all;
+  font-family:'Courier New',monospace;margin-bottom:4px;
+  background:linear-gradient(135deg,var(--violet2),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.promo-valid{font-size:12px;color:var(--muted-fg);margin-bottom:13px}
+.copy-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:8px 18px;background:var(--violet);border:none;
+  border-radius:var(--radius);color:#fff;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:opacity .1s;
+}
+.copy-btn:hover{opacity:.88}
+.copy-btn.ok{background:var(--grn)}
+.promo-note{font-size:11px;color:var(--muted-fg);margin-top:8px;line-height:1.5}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+@media(max-width:360px){.stat-grid{grid-template-columns:1fr 1fr}}
+.s-box{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:11px;text-align:center;
+}
+.s-val{font-size:20px;font-weight:900;color:var(--violet2)}
+.s-lbl{font-size:10px;color:var(--muted-fg);font-weight:600;margin-top:2px}
+.link-row{display:flex;gap:8px;flex-wrap:wrap}
+.link-btn{
+  flex:1;min-width:120px;padding:9px;border:1px solid var(--border);
+  border-radius:var(--radius);background:var(--secondary);
+  color:var(--foreground);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;transition:border-color .1s;text-align:center;
+}
+.link-btn:hover{border-color:var(--violet)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="top-bar">
+  <span class="logo">WinSkin</span>
+  <div class="bar-actions">
+    <!-- LANG DROPDOWN -->
+    <div class="dd-wrap" id="lang-wrap">
+      <button class="icon-btn" onclick="toggleDD('lang')" title="Language">
+        <span id="lang-icon" style="font-size:16px;line-height:1">🇷🇺</span>
+      </button>
+      <div class="dd-menu" id="lang-menu">
+        <div class="dd-section" id="dd-lang-lbl">Язык</div>
+        <button class="dd-row" id="lr-ru" onclick="setLang('ru')">🇷🇺 Русский</button>
+        <button class="dd-row" id="lr-kz" onclick="setLang('kz')">🇰🇿 Қазақша</button>
+        <button class="dd-row" id="lr-en" onclick="setLang('en')">🇬🇧 English</button>
+      </div>
+    </div>
+    <!-- THEME DROPDOWN -->
+    <div class="dd-wrap" id="theme-wrap">
+      <button class="icon-btn" onclick="toggleDD('theme')" title="Theme" id="theme-toggle-btn">
+        <svg id="theme-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <div class="dd-menu" id="theme-menu">
+        <div class="dd-section" id="dd-theme-lbl">Тема</div>
+        <button class="dd-row" id="tr-dark" onclick="setTheme('dark')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span id="tl-dark">Тёмная</span>
+        </button>
+        <button class="dd-row" id="tr-light" onclick="setTheme('light')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <span id="tl-light">Светлая</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero" id="hero-block">
+    <div class="hero-badge" id="h-badge">🎮 Эксклюзивный опрос</div>
+    <h1 id="h-title">Твой голос стоит <em>1 час игры</em> 🔥</h1>
+    <p class="hero-sub" id="h-sub">Ответь честно — поможешь запустить крутую штуку прямо в клубе. Промокод на час игры сразу после прохождения.</p>
+    <div class="prize-row">
+      <span style="font-size:20px;flex-shrink:0">🎁</span>
+      <div class="prize-body">
+        <strong id="h-prize">1 час игры бесплатно</strong>
+        <span id="h-prize-sub">Промокод появится сразу · Работает во всех клубах PRIME</span>
+      </div>
+      <div class="time-tag" id="h-time">⏱ ~8 мин</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="prog-wrap" id="prog-block">
+    <div class="prog-top">
+      <span class="prog-block" id="prog-name">Верификация</span>
+      <span class="prog-pct" id="prog-pct">0%</span>
+    </div>
+    <div class="prog-bar"><div class="prog-bar-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="dots-row" id="dots-row"></div>
+  </div>
+
+  <!-- AGE GATE -->
+  <div class="gate" id="gate-age">
+    <div class="gate-card">
+      <div class="gate-icon">🚫</div>
+      <div class="gate-title err" id="gate-title">Не подходишь по возрасту</div>
+      <p class="gate-body" id="gate-body">Сорян, опрос для тех, кому 14–45 лет. Спасибо за интерес к WinSkin!</p>
+    </div>
+  </div>
+
+  <!-- SURVEY -->
+  <div id="sb"></div>
+
+  <!-- RESULT -->
+  <div id="result-screen">
+    <div class="res-hero">
+      <div class="res-icon">🏆</div>
+      <h2 id="res-title">Огонь! Ты помогаешь изменить игру</h2>
+      <p id="res-sub">Твои ответы помогут запустить торговлю скинами прямо в клубах PRIME. Держи промокод:</p>
+    </div>
+    <div class="promo-card">
+      <div class="promo-label" id="res-promo-lbl">ПРОМОКОД НА 1 ЧАС ИГРЫ</div>
+      <div class="promo-code" id="promo-out">PRIME-XXX-XXX</div>
+      <div class="promo-valid" id="res-valid">Действителен 30 дней · Предъяви на стойке клуба PRIME</div>
+      <button class="copy-btn" id="copy-btn" onclick="copyPromo()">📋 <span id="copy-lbl">Скопировать</span></button>
+      <div class="promo-note" id="res-note">Один промокод — один человек. Работает в любом клубе PRIME.</div>
+    </div>
+    <div class="stat-grid" id="stat-grid"></div>
+    <div class="card" style="margin-bottom:12px;padding:14px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--violet2);margin-bottom:9px" id="res-follow">Следи за запуском WinSkin</div>
+      <div class="link-row">
+        <button class="link-btn" onclick="openLink('https://t.me/winskin_games')">💬 Telegram</button>
+        <button class="link-btn" onclick="openLink('https://winskin.games')">🌐 winskin.games</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══ I18N ═══════════════════════════════════════════════════
+let LANG='ru';
+const FLGS={ru:'🇷🇺',kz:'🇰🇿',en:'🇬🇧'};
+const TR={
+ru:{
+  blocks:['Верификация','Игровой профиль','Скины','Покупки','Доверие','WinSkin','О тебе'],
+  'dd.lang':'Язык','dd.theme':'Тема',
+  'theme.dark':'Тёмная','theme.light':'Светлая',
+  'h.badge':'🎮 Эксклюзивный опрос',
+  'h.title':'Твой голос стоит <em>1 час игры</em> 🔥',
+  'h.sub':'Ответь честно — поможешь запустить крутую штуку прямо в клубе. Промокод на час игры сразу после прохождения.',
+  'h.prize':'1 час игры бесплатно','h.prize.sub':'Промокод появится сразу · Работает во всех клубах PRIME','h.time':'⏱ ~8 мин',
+  'gate.title':'Не подходишь по возрасту','gate.body':'Сорян, опрос для тех, кому 14–45 лет. Спасибо за интерес к WinSkin!',
+  'res.title':'Огонь! Ты помогаешь изменить игру',
+  'res.sub':'Твои ответы помогут запустить торговлю скинами прямо в клубах PRIME. Держи промокод:',
+  'res.promo.lbl':'ПРОМОКОД НА 1 ЧАС ИГРЫ',
+  'res.valid':'Действителен 30 дней · Предъяви на стойке клуба PRIME',
+  'res.copy':'Скопировать','res.note':'Один промокод — один человек. Работает в любом клубе PRIME.',
+  'res.follow':'Следи за запуском WinSkin',
+  'stat.ans':'Ответов','stat.blk':'Блоков','stat.spend':'Трат/год',
+  'nav.next':'Дальше →','nav.fin':'Получить промокод 🎁','nav.back':'← Назад','nav.skip':'Пропустить',
+  'val.pick':'Выбери вариант, чтобы продолжить',
+  'val.multi':'Выбери хотя бы один вариант',
+  'val.iin.len':'Введи все 12 цифр ИИН',
+  'val.iin.bad':'Некорректный ИИН — проверь 7-ю цифру',
+  'val.text':'Напиши хотя бы {n} символов',
+  'val.likert':'{n} строк без оценки — оцени все',
+  'iin.lbl':'ИИН — 12 цифр',
+},
+kz:{
+  blocks:['Верификация','Ойын профилі','Скиндер','Сатып алу','Сенім','WinSkin','Сіз туралы'],
+  'dd.lang':'Тіл','dd.theme':'Тақырып',
+  'theme.dark':'Қараңғы','theme.light':'Жарық',
+  'h.badge':'🎮 Эксклюзивті сауалнама',
+  'h.title':'Пікіріңіз <em>1 сағат ойынға</em> тұрады 🔥',
+  'h.sub':'Шынайы жауап бер — клубта керемет нәрсені іске қосуға көмектес.',
+  'h.prize':'1 сағат тегін ойын','h.prize.sub':'Промокод бірден · PRIME барлық клубтарда жарамды','h.time':'⏱ ~8 мин',
+  'gate.title':'Жас аралығына сәйкес емес','gate.body':'Кешіріңіз, сауалнама 14–45 жас аралығындағыларға арналған.',
+  'res.title':'Керемет! Сен ойынды өзгертуге көмектесесің',
+  'res.sub':'Жауаптарың PRIME клубтарында скин саудасын іске қосуға көмектеседі.',
+  'res.promo.lbl':'1 САҒАТ ОЙЫНҒА ПРОМОКОД',
+  'res.valid':'30 күн жарамды · PRIME клубы кассасында ұсын',
+  'res.copy':'Көшіру','res.note':'Бір промокод — бір адам. Кез келген PRIME клубында жарамды.',
+  'res.follow':'WinSkin іске қосылуын бақыла',
+  'stat.ans':'Жауаптар','stat.blk':'Блоктар','stat.spend':'Шығын/жыл',
+  'nav.next':'Әрі қарай →','nav.fin':'Промокод алу 🎁','nav.back':'← Артқа','nav.skip':'Өткізіп жібер',
+  'val.pick':'Жалғастыру үшін жауап таңда',
+  'val.multi':'Кем дегенде бір вариант таңда',
+  'val.iin.len':'ЖСН-нің 12 цифрын енгіз',
+  'val.iin.bad':'Дұрыс емес ЖСН — 7-ші санды тексер',
+  'val.text':'{n} символдан артық жаз',
+  'val.likert':'{n} жол бағаланбаған',
+  'iin.lbl':'ЖСН — 12 цифр',
+},
+en:{
+  blocks:['Verification','Gaming Profile','Skins','Purchases','Trust','WinSkin','About You'],
+  'dd.lang':'Language','dd.theme':'Theme',
+  'theme.dark':'Dark','theme.light':'Light',
+  'h.badge':'🎮 Exclusive Survey',
+  'h.title':'Your opinion is worth <em>1 hour of gaming</em> 🔥',
+  'h.sub':'Answer honestly — help us launch something awesome in the club. Get a free hour promo code instantly.',
+  'h.prize':'1 hour gaming free','h.prize.sub':'Promo code generated instantly · Valid at all PRIME clubs','h.time':'⏱ ~8 min',
+  'gate.title':'Age not eligible','gate.body':'Sorry, this survey is for people aged 14–45. Thanks for your interest in WinSkin!',
+  'res.title':'Awesome! You\'re helping change the game',
+  'res.sub':'Your answers will help launch skin trading right inside PRIME clubs. Here\'s your promo code:',
+  'res.promo.lbl':'1 HOUR GAMING PROMO CODE',
+  'res.valid':'Valid 30 days · Show at any PRIME club desk',
+  'res.copy':'Copy code','res.note':'One code per person. Valid at any PRIME club.',
+  'res.follow':'Follow WinSkin launch',
+  'stat.ans':'Answers','stat.blk':'Blocks','stat.spend':'Spend/yr',
+  'nav.next':'Continue →','nav.fin':'Get promo code 🎁','nav.back':'← Back','nav.skip':'Skip',
+  'val.pick':'Pick an option to continue',
+  'val.multi':'Pick at least one option',
+  'val.iin.len':'Enter all 12 digits of your IIN',
+  'val.iin.bad':'Invalid IIN — check digit 7',
+  'val.text':'Write at least {n} characters',
+  'val.likert':'{n} rows still unrated',
+  'iin.lbl':'IIN — 12 digits',
+}};
+function t(k,v){let s=(TR[LANG]||TR.ru)[k]||(TR.ru[k]||k);if(v)Object.keys(v).forEach(x=>{s=s.replace('{'+x+'}',v[x]);});return s;}
+
+function setLang(l){
+  LANG=l;
+  document.documentElement.lang=l;
+  document.getElementById('lang-icon').textContent=FLGS[l]||'🌐';
+  // update active states
+  ['ru','kz','en'].forEach(x=>{ const el=document.getElementById('lr-'+x); if(el)el.classList.toggle('active',x===l); });
+  // update static strings
+  upd('dd-lang-lbl',t('dd.lang'));
+  upd('dd-theme-lbl',t('dd.theme'));
+  upd('tl-dark',t('theme.dark')); upd('tl-light',t('theme.light'));
+  upd('h-badge',t('h.badge')); upd('h-title',t('h.title'),true);
+  upd('h-sub',t('h.sub')); upd('h-prize',t('h.prize'));
+  upd('h-prize-sub',t('h.prize.sub')); upd('h-time',t('h.time'));
+  upd('gate-title',t('gate.title')); upd('gate-body',t('gate.body'));
+  upd('res-title',t('res.title')); upd('res-sub',t('res.sub'));
+  upd('res-promo-lbl',t('res.promo.lbl')); upd('res-valid',t('res.valid'));
+  upd('copy-lbl',t('res.copy')); upd('res-note',t('res.note'));
+  upd('res-follow',t('res.follow'));
+  toggleDD('lang',true);
+  renderQ(currentQ);
+}
+function upd(id,txt,isHTML){const el=document.getElementById(id);if(el){if(isHTML)el.innerHTML=txt;else el.textContent=txt;}}
+
+// ═══ THEME ══════════════════════════════════════════════════
+const MOON=`<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+const SUN=`<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+function setTheme(th){
+  document.documentElement.setAttribute('data-theme',th);
+  const svg=document.getElementById('theme-svg');
+  if(svg) svg.innerHTML=th==='dark'?MOON:SUN;
+  ['dark','light'].forEach(x=>{const el=document.getElementById('tr-'+x);if(el)el.classList.toggle('active',x===th);});
+  try{localStorage.setItem('ws-th',th);}catch(e){}
+  toggleDD('theme',true);
+}
+(()=>{try{const th=localStorage.getItem('ws-th');setTheme(th&&['dark','light'].includes(th)?th:'dark');}catch(e){setTheme('dark');}})();
+
+// ═══ DROPDOWN ═══════════════════════════════════════════════
+function toggleDD(name,forceClose){
+  const menu=document.getElementById(name+'-menu');
+  if(!menu)return;
+  if(forceClose){menu.classList.remove('open');return;}
+  document.querySelectorAll('.dd-menu.open').forEach(m=>{if(m!==menu)m.classList.remove('open');});
+  menu.classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.dd-wrap')) document.querySelectorAll('.dd-menu.open').forEach(m=>m.classList.remove('open'));
+});
+
+// ═══ QUESTIONS ══════════════════════════════════════════════
+const QS=[
+{id:'iin',b:0,type:'iin',req:true,
+ ru:{text:'Введи свой ИИН',hint:'Только для генерации промокода — не передаём третьим лицам.'},
+ kz:{text:'ЖСН-іңді енгіз',hint:'Тек промокод жасау үшін — үшінші тараптарға бермейміз.'},
+ en:{text:'Enter your IIN',hint:'Used only to generate your promo code — never shared.'}},
+{id:'visit_freq',b:1,type:'single',req:true,
+ ru:{text:'Как часто ты бываешь в игровых клубах?',hint:'',opts:['Первый раз / случайно зашёл','Пару раз в год','Раз в месяц примерно','Несколько раз в месяц','Каждую неделю или чаще — почти живу тут']},
+ kz:{text:'Ойын клубтарына қаншалықты жиі барасың?',hint:'',opts:['Алғаш рет','Жылына бірнеше рет','Айына бір рет шамасында','Айына бірнеше рет','Апта сайын немесе жиірек']},
+ en:{text:'How often do you visit gaming clubs?',hint:'',opts:['First time / just passing by','A couple times a year','About once a month','Several times a month','Weekly or more — practically live here']}},
+{id:'games',b:1,type:'multi',min:1,req:true,
+ ru:{text:'В какие игры рубишься регулярно?',hint:'Всё, во что играешь хотя бы раз в месяц',opts:['CS2 / CS:GO','Dota 2','Valorant','PUBG / Warzone','FIFA / EA Sports FC','Другие игры со скинами','Игры без скинов','Другое']},
+ kz:{text:'Қандай ойындарды жиі ойнайсың?',hint:'',opts:['CS2 / CS:GO','Dota 2','Valorant','PUBG / Warzone','FIFA / EA Sports FC','Скиндері бар басқа ойындар','Скинсіз ойындар','Басқа']},
+ en:{text:'Which games do you regularly play?',hint:'Anything you play at least monthly',opts:['CS2 / CS:GO','Dota 2','Valorant','PUBG / Warzone','FIFA / EA Sports FC','Other games with skins','Games without skins','Other']}},
+{id:'cs2_hours',b:1,type:'single',req:true,
+ ru:{text:'Сколько часов в неделю ты в CS2?',hint:'Если не играешь — первый вариант',opts:['Не играю в CS2','Меньше 5 часов','5–10 часов','10–20 часов','20+ часов — CS2 это жизнь']},
+ kz:{text:'Апта сайын CS2-де қанша сағат ойнайсың?',hint:'',opts:['CS2-де ойнамаймын','5 сағаттан аз','5–10 сағат','10–20 сағат','20+ сағат']},
+ en:{text:'How many hours a week do you play CS2?',hint:"Not a player? Pick the first one",opts:["Don't play CS2",'Under 5 hours','5–10 hours','10–20 hours','20+ hours — CS2 is life']}},
+{id:'cs2_rank',b:1,type:'single',req:true,
+ ru:{text:'Твой уровень в CS2?',hint:'Примерно — никто не проверяет 😄',opts:[{t:'Нубик',s:'Играю ради фана'},{t:'Любитель',s:'Silver – Gold Nova'},{t:'Мидлер',s:'Master Guardian – LE'},{t:'Хардкорщик',s:'Supreme – Global Elite / Premier 15K+'},{t:'Проф / полупроф',s:'Участвую в турнирах'}]},
+ kz:{text:'CS2-дегі деңгейің?',hint:'',opts:[{t:'Жаңадан бастаушы',s:''},{t:'Хоббист',s:'Silver – Gold Nova'},{t:'Орта деңгей',s:'MG – LE'},{t:'Тәжірибелі',s:'Supreme – GE'},{t:'Кәсіби',s:'Турнирлерде'}]},
+ en:{text:"What's your CS2 level?",hint:"Roughly — no one's checking 😄",opts:[{t:'Casual',s:'Play for fun'},{t:'Amateur',s:'Silver – Gold Nova'},{t:'Mid',s:'Master Guardian – LE'},{t:'Hardcore',s:'Supreme – Global Elite / 15K+'},{t:'Pro / semi-pro',s:'I compete'}]}},
+{id:'content',b:1,type:'single',req:true,
+ ru:{text:'Следишь за CS2-контентом?',hint:'Стримы, турниры, ютуб, тг — всё в счёт',opts:['Нет, просто рублюсь','Иногда смотрю без фанатизма','Слежу за парой ресурсов','Активно слежу за всем']},
+ kz:{text:'CS2 контентін қадағалайсың ба?',hint:'',opts:['Жоқ, тек ойнаймын','Кейде қараймын','Бірнеше ресурсты бақылаймын','Барлығын белсенді қадағалаймын']},
+ en:{text:'Do you follow CS2 content?',hint:'Streams, tournaments, YouTube, Telegram',opts:['Nope, just play','Sometimes, casually','Regularly follow a couple sources','Actively follow everything']}},
+{id:'skin_importance',b:2,type:'scale',min:1,max:10,req:true,
+ ru:{text:'Насколько тебе важно, как выглядит оружие в CS2?',hint:'1 — пофиг, 10 — это часть тебя',descs:['','Полный пофиг','','','','Нейтрально','','Важно','','','Критично — без красивого скина не играю']},
+ kz:{text:'CS2-де қарудың сыртқы көрінісі маңызды ма?',hint:'',descs:['','Мүлде маңызды емес','','','','Бейтарап','','Маңызды','','','Өте маңызды']},
+ en:{text:"How important is weapon appearance in CS2?",hint:"1 = couldn't care less, 10 = part of my identity",descs:['','Couldn\'t care less','','','','Neutral','','Important','','','Can\'t play without a nice skin']}},
+{id:'skin_inventory',b:2,type:'single',req:true,
+ ru:{text:'Сколько примерно стоит твой инвентарь в Steam?',hint:'Суммарно',opts:['Пустой — совсем ничего','Только дефолтные / бесплатные','До $10','$10 – $50','$50 – $200','$200 – $1000','Больше $1000 — у меня сейф 😎']},
+ kz:{text:'Steam қоймаңның бағасы шамамен қанша?',hint:'',opts:['Бос','Тек тегін скиндер','$10 дейін','$10 – $50','$50 – $200','$200 – $1000','$1000+']},
+ en:{text:"What's your Steam inventory roughly worth?",hint:'Total value',opts:['Empty — nothing','Just defaults / free drops','Under $10','$10 – $50','$50 – $200','$200 – $1000','$1000+ — got a vault 😎']}},
+{id:'skin_identity',b:2,type:'multi',min:1,req:true,
+ ru:{text:'С чем согласен? Отметь своё',hint:'Честно — анализируем мотивацию',opts:['Скин — это часть моего игрового образа','Редкий скин показывает, что я серьёзный игрок','Покупаю, потому что скины растут в цене','Скин не влияет на игру — просто картинка','Хочу красивое, но не хочу переплачивать','Мне не важна внешка']},
+ kz:{text:'Нені растайсың?',hint:'',opts:['Скин — ойын бейнемнің бөлігі','Сирек скин — маним байсалды ойыншы екенімді көрсетеді','Скиндер бағасы өседі деп сатып аламын','Скин тек сурет','Әдемісін қалаймын, бірақ артық төлегім келмейді','Сыртқы көрініс маңызды емес']},
+ en:{text:'What resonates with you? Check all that apply',hint:'Honest answers help us build better',opts:['Skins are part of my gaming identity','A rare skin shows I\'m a serious player','I buy skins as investments','Skins are just cosmetics — they don\'t matter','I want nice stuff but won\'t overpay','Looks don\'t matter to me']}},
+{id:'skin_value_frame',b:2,type:'single',req:true,
+ ru:{text:'Скины — это для тебя…',hint:'Выбери, что ближе',opts:[{t:'Трата денег',s:'Просто картинки, не стоят вложений'},{t:'Удовольствие',s:'Хобби — плачу ради кайфа'},{t:'Что-то среднее',s:'И фан, и можно выгодно перепродать'},{t:'Инвестиция',s:'Правильные скины дорожают'}]},
+ kz:{text:'Скиндер сен үшін…',hint:'',opts:[{t:'Ақша шығыны',s:'Тек сурет'},{t:'Ләззат',s:'Хобби'},{t:'Аралықта',s:'Де ләззат, де инвестиция'},{t:'Инвестиция',s:'Скиндер бағасы өседі'}]},
+ en:{text:'Skins are, for you…',hint:'Pick what fits best',opts:[{t:'Spending',s:'Just pixels — not worth real money'},{t:'Entertainment',s:'It\'s a hobby — paying for fun'},{t:'Both',s:'Fun and potentially profitable'},{t:'Investment',s:'Good skins appreciate in value'}]}},
+{id:'earn_interest',b:3,type:'single',req:true,
+ ru:{text:'Если можно зарабатывать на скинах — купил за $10, продал за $15 — тебе интересно?',hint:'',opts:['Да, я уже это делаю','Да, хочу попробовать','Возможно, если платформа удобная','Вряд ли — слишком заморочно','Нет, не моё']},
+ kz:{text:'Скиндерден табыс табу қызықты ма?',hint:'',opts:['Иә, жасаймын','Иә, сынап көргім келеді','Мүмкін','Қиын — менің үшін емес','Жоқ']},
+ en:{text:'Would you be interested in making money from skins — buy for $10, sell for $15?',hint:'',opts:['Yes — I already do this','Yes, I\'d love to try','Maybe if the platform is easy','Probably not — too much effort','No, not for me']}},
+{id:'buy_history',b:3,type:'single',req:true,
+ ru:{text:'Покупал скины за реальные деньги?',hint:'Любым способом — Steam, сторонники, трейд',opts:['Да, покупаю регулярно — привычка','Да, несколько раз за год','Покупал раньше, сейчас нет','Не покупал, но думаю попробовать','Никогда и не планирую']},
+ kz:{text:'Скиндерді нақты ақшаға сатып алдың ба?',hint:'',opts:['Иә, жиі','Иә, биыл бірнеше рет','Бұрын алдым','Алмадым, бірақ қарастырамын','Ешқашан']},
+ en:{text:'Have you ever bought skins with real money?',hint:'Any method — Steam, third-party, trades',opts:['Yes, regularly — it\'s a habit','Yes, a few times this year','Did it before, not now','Never, but thinking about it','Never and not planning to']}},
+{id:'last_purchase',b:3,type:'single',req:true,
+ ru:{text:'Когда последний раз покупал скин?',hint:'',opts:['На этой неделе','В этом месяце','1–3 месяца назад','3–6 месяцев назад','Больше полугода назад','Никогда не покупал']},
+ kz:{text:'Скинді соңғы рет қашан алдың?',hint:'',opts:['Осы аптада','Осы айда','1–3 ай бұрын','3–6 ай бұрын','6+ ай бұрын','Ешқашан']},
+ en:{text:'When did you last buy a skin?',hint:'',opts:['This week','This month','1–3 months ago','3–6 months ago','6+ months ago','Never']}},
+{id:'buy_freq',b:3,type:'single',req:true,
+ ru:{text:'Как часто покупаешь скины?',hint:'Реальная частота',opts:['Несколько раз в неделю — хардкор','Раз в неделю примерно','Несколько раз в месяц','Раз в месяц или реже','Очень редко','Не покупаю']},
+ kz:{text:'Скиндерді қаншалықты жиі сатып аласың?',hint:'',opts:['Аптасына бірнеше рет','Аптасына бір рет','Айына бірнеше рет','Айына бір рет немесе сирек','Өте сирек','Сатып алмаймын']},
+ en:{text:'How often do you buy skins?',hint:'Real frequency',opts:['Multiple times a week','About once a week','Several times a month','Once a month or less','Very rarely','Don\'t buy']}},
+{id:'avg_check',b:3,type:'single',req:true,
+ ru:{text:'Средняя трата за одну покупку скина?',hint:'Типичная — не максимум и не минимум',opts:['До $3','$3 – $10','$10 – $25','$25 – $50','$50 – $100','$100 – $250','Больше $250']},
+ kz:{text:'Бір рет скин алғанда орта шығын?',hint:'',opts:['$3 дейін','$3 – $10','$10 – $25','$25 – $50','$50 – $100','$100 – $250','$250+']},
+ en:{text:'Average spend per skin purchase?',hint:'Think typical — not your max',opts:['Under $3','$3 – $10','$10 – $25','$25 – $50','$50 – $100','$100 – $250','$250+']}},
+{id:'annual_spend',b:3,type:'single',req:true,
+ ru:{text:'Примерно сколько потратил на скины за последние 12 месяцев?',hint:'Реальная цифра важна — она покажет размер рынка изнутри',opts:['Меньше $10','$10 – $30','$30 – $100','$100 – $300','$300 – $1000','Больше $1000 💸','Не покупал / не знаю']},
+ kz:{text:'Соңғы 12 айда скиндерге қанша жұмсадың?',hint:'',opts:['$10 дейін','$10 – $30','$30 – $100','$100 – $300','$300 – $1000','$1000+','Білмеймін']},
+ en:{text:'How much did you spend on skins in the last 12 months?',hint:'Real number helps us understand the market',opts:['Under $10','$10 – $30','$30 – $100','$100 – $300','$300 – $1000','$1000+ 💸',"Didn't buy / don't know"]}},
+{id:'sell_history',b:3,type:'single',req:true,
+ ru:{text:'Продавал скины за последний год?',hint:'',opts:['Нет, только покупаю','Да, иногда продавал','Да, регулярно торгую — купля-продажа','Активно торгую — это способ зарабатывать']},
+ kz:{text:'Соңғы жылда скиндерді саттың ба?',hint:'',opts:['Жоқ, тек сатып аламын','Иә, кейде','Иә, жиі саудаламын','Белсенді саудаламын']},
+ en:{text:'Did you sell any skins in the past year?',hint:'',opts:['No, I only buy','Yes, occasionally','Yes, I trade regularly','Actively trade — it\'s a side income']}},
+{id:'platforms',b:3,type:'multi',min:1,req:true,
+ ru:{text:'Где обычно покупаешь / продаёшь скины?',hint:'Всё, чем пользовался хотя бы раз',opts:['Steam Market (официально)','CS.MONEY','DMarket','Skinport','Buff163','Telegram / Discord','Напрямую с игроками','Другие сайты','Нигде / не торгую']},
+ kz:{text:'Скиндерді қайда саудалайсың?',hint:'',opts:['Steam Market','CS.MONEY','DMarket','Skinport','Buff163','Telegram / Discord','Ойыншылармен тікелей','Басқа сайттар','Ешқайда']},
+ en:{text:'Where do you usually buy / sell skins?',hint:"Everything you've used at least once",opts:['Steam Market (official)','CS.MONEY','DMarket','Skinport','Buff163','Telegram / Discord','Direct player trades','Other sites','Nowhere / don\'t trade']}},
+{id:'trust_factors',b:4,type:'likert',req:true,
+ ru:{text:'Что важно при выборе платформы для скинов?',hint:'Оцени каждый фактор от 1 до 5',rows:['Репутация и известность','Безопасность передачи скина','Реальные отзывы пользователей','Поддержка на русском/казахском','Гарантия возврата при проблеме','Низкая и прозрачная комиссия','Скорость доставки скина']},
+ kz:{text:'Скин платформасын таңдауда не маңызды?',hint:'',rows:['Беделі мен танымалдылығы','Скинді беру қауіпсіздігі','Нақты пайдаланушы пікірлері','Қазақша/орысша қолдау','Мәселе кезіндегі қайтару','Төмен комиссия','Жылдам жеткізу']},
+ en:{text:'What matters when choosing a skin platform?',hint:'Rate each from 1 to 5',rows:['Reputation and recognition','Security of item transfer','Real user reviews','Support in your language','Refund guarantee','Low transparent fees','Speed of delivery']}},
+{id:'bad_experience',b:4,type:'single',req:true,
+ ru:{text:'Был плохой опыт при покупке скинов вне Steam?',hint:'Честный ответ поможет сделать всё безопаснее',opts:['Нет, всегда без проблем','Была мелкая проблема, решилась','Да, был стрёмный опыт — задержка или спор','Да, меня кинули / потерял деньги','Никогда не покупал вне Steam']},
+ kz:{text:'Steam-нен тыс скин алу кезінде жаман тәжірибе болды ма?',hint:'',opts:['Жоқ','Кішкентай мәселе болды','Иә, жаман болды','Иә, алданып қалдым','Steam-нен тыс ешқашан алмадым']},
+ en:{text:'Bad experience buying skins outside Steam?',hint:'Helps us make things safer',opts:['No, always smooth','Minor issue, got resolved','Yes, sketchy — delay or dispute','Yes, got scammed / lost money','Never bought outside Steam']}},
+{id:'steam_commission',b:4,type:'single',req:true,
+ ru:{text:'Знаешь, что Steam берёт 15% комиссии с каждой продажи?',hint:'Просто факт — насколько это тебя задевает',opts:['Да, знаю — это реально бесит','Да, знаю — мне не критично','Не знал, что так много — ого','Не продавал, не замечал']},
+ kz:{text:'Steam әр сатылымнан 15% алатынын білесің бе?',hint:'',opts:['Иә, ашуландырады','Иә, маңызды емес','Білмедім, бұл көп','Сатқан жоқпын']},
+ en:{text:'Did you know Steam takes a 15% cut on every sale?',hint:'Just a fact — how much does it bother you?',opts:['Yes — pisses me off honestly','Yes, but doesn\'t bother me','Didn\'t know it was that high — wow','Haven\'t sold, never noticed']}},
+{id:'offline_trust',b:4,type:'scale',min:1,max:10,req:true,
+ ru:{text:'Если скин-маркет встроен прямо в клуб — насколько доверишься?',hint:'Сравни с рандомным сайтом в интернете',descs:['','Вообще нет','','','','Нейтрально — как любому сайту','','','','','Полностью — клуб это реальное место']},
+ kz:{text:'Скин маркеті клубқа кірсе, қанша сенесің?',hint:'',descs:['','Мүлде жоқ','','','','Бейтарап','','','','','Толығымен']},
+ en:{text:'If a skin marketplace is built into this club — how much would you trust it?',hint:'Compare to a random site online',descs:['','Not at all','','','','Neutral','','','','','Completely — it\'s a real place I know']}},
+{id:'switch_readiness',b:5,type:'scale',min:1,max:10,req:true,
+ ru:{text:'Комиссия 5% вместо 15% Steam. Реально ты бы перешёл?',hint:'Честная оценка — не идеальная',descs:['','Точно нет','','','','Может быть','','','','','Точно да — прямо сейчас']},
+ kz:{text:'15% орнына 5% болса, ауысасың ба?',hint:'',descs:['','Жоқ','','','','Мүмкін','','','','','Иә, қазір']},
+ en:{text:'5% fee instead of Steam\'s 15% — would you switch?',hint:'Honest assessment',descs:['','Definitely not','','','','Maybe','','','','','100% yes — right now']}},
+{id:'in_club_intent',b:5,type:'single',req:true,
+ ru:{text:'Если терминал для торговли скинами стоит прямо в этом клубе — что сделаешь?',hint:'Представь — он уже работает',opts:['Зашёл бы прямо сейчас — почему нет','Попробую при следующем визите','Возможно, если всё просто и понятно','Нет, пользуюсь проверенными местами','Нет, скины вообще не моё']},
+ kz:{text:'Осы клубта скин саудасы терминалы болса?',hint:'',opts:['Қазір кірер едім','Келесі келгенде','Мүмкін, егер қарапайым болса','Жоқ, менде сенімді орындар бар','Жоқ']},
+ en:{text:'If a skin trading terminal were right here in this club — what would you do?',hint:"Imagine it's already running",opts:['Jump in right now — why not','Try it next visit','Maybe if it\'s simple','Nope, I use my go-to platforms','No, skins aren\'t for me']}},
+{id:'intent_30d',b:5,type:'scale',min:1,max:10,req:true,
+ ru:{text:'Насколько вероятно купишь / продашь скин в ближайшие 30 дней?',hint:'Реальная оценка — важная цифра для нас',descs:['','Точно нет','','','','Скорее нет','','Скорее да','','','Точно да — уже мониторю']},
+ kz:{text:'Алдағы 30 күн ішінде скин алу/сату ықтималдығы?',hint:'',descs:['','Жоқ','','','','Жоқ шығар','','Иә шығар','','','Иә']},
+ en:{text:'How likely are you to buy/sell a skin in the next 30 days?',hint:'Real estimate — key number for us',descs:['','Definitely not','','','','Probably not','','Probably yes','','','Definitely — already browsing']}},
+{id:'feature_priority',b:5,type:'rank',req:true,
+ ru:{text:'Что важнее всего в платформе для скинов?',hint:'Перетащи — самое важное наверх 👆',items:['Комиссия ниже Steam','Безопасность сделки','Быстрая доставка скина','Удобный интерфейс','Большой каталог скинов','Поддержка на русском/казахском']},
+ kz:{text:'Скин платформасында не маңызды?',hint:'Сүйреп апар — ең маңыздысы жоғарыда 👆',items:['Steam-ге қарағанда төмен комиссия','Мәміле қауіпсіздігі','Жылдам жеткізу','Ыңғайлы интерфейс','Үлкен каталог','Қазақша/орысша қолдау']},
+ en:{text:'What matters most in a skin trading platform?',hint:'Drag to reorder — most important at top 👆',items:['Lower fee than Steam','Transaction security','Fast delivery','Clean interface','Large catalog','Support in your language']}},
+{id:'cases_exp',b:5,type:'single',req:true,
+ ru:{text:'Открывал когда-нибудь кейсы — в Steam или на других сайтах?',hint:'Кейс = рандомный скин за фиксированную цену',opts:['Да, в Steam — норм','Да, на сторонних сайтах','Не пробовал, хочу попробовать','Не пробовал, не особо интересно','Нет, рандом — не моё']},
+ kz:{text:'Кейстерді ашып көрдің бе?',hint:'',opts:['Иә, Steam-да','Иә, сыртқы сайттарда','Байқамадым, қалаймын','Байқамадым, қызықты емес','Жоқ']},
+ en:{text:'Have you ever opened cases — in Steam or elsewhere?',hint:'Case = random skin for a fixed price',opts:['Yes, in Steam — pretty fun','Yes, on third-party sites','Never tried, want to','Never tried, not interested','No, random drops aren\'t for me']}},
+{id:'referral',b:5,type:'single',req:true,
+ ru:{text:'За каждого друга, купившего скин — $1–2 кредита тебе. Будешь рекомендовать?',hint:'Реальная фича WinSkin',opts:['Да, скину ссылку в общак 😄','Да, если сам буду доволен','Может быть','Нет, не мой стиль']},
+ kz:{text:'Скин сатып алған досыңды әкелсең — $1–2 кредит. Ұсынасың ба?',hint:'',opts:['Иә, ұсынамын','Иә, өзім ұнатсам','Мүмкін','Жоқ']},
+ en:{text:'$1–2 credit for every friend who buys a skin — would you refer people?',hint:'Real WinSkin feature',opts:['Yes, I\'d drop the link in the group chat 😄','Yes, if I like the platform','Maybe','No, not really my style']}},
+{id:'occupation',b:6,type:'single',req:true,
+ ru:{text:'Чем занимаешься?',hint:'Помогает понять нашу аудиторию',opts:['Школьник','Студент','Работаю (найм)','Самозанятый / свой бизнес','Не работаю / другое']},
+ kz:{text:'Не жасайсың?',hint:'',opts:['Мектепте оқимын','Студентпін','Жұмыс істеймін','Өзіндік бизнес','Жұмыс істемеймін']},
+ en:{text:'What do you do?',hint:'Helps us understand our audience',opts:['In school','College / university','Employed','Self-employed / entrepreneur','Not working / other']}},
+{id:'gaming_budget',b:6,type:'single',req:true,
+ ru:{text:'Сколько в месяц тратишь на всё игровое?',hint:'Подписки, скины, донат, DLC — всё вместе',opts:['Практически ноль','До $5','$5 – $15','$15 – $30','$30 – $60','Больше $60 — не считаю']},
+ kz:{text:'Ойындарға айына қанша жұмсайсың?',hint:'',opts:['Мүлде жоқ','$5 дейін','$5 – $15','$15 – $30','$30 – $60','$60+']},
+ en:{text:'How much do you spend monthly on gaming stuff?',hint:'Subs, skins, DLC, donations — all combined',opts:['Basically nothing','Under $5','$5 – $15','$15 – $30','$30 – $60','$60+ — I stopped counting']}},
+{id:'open_pain',b:6,type:'text',minLen:20,maxLen:400,req:true,
+ ru:{text:'Что больше всего бесит в том, как сейчас устроена торговля скинами?',hint:'Пиши как есть — читаем каждый ответ. Хотя бы 20 символов.',placeholder:'Например: жирные комиссии, страх кидалова, нет оплаты в тенге, неудобный интерфейс...'},
+ kz:{text:'Скин саудасының қазіргі жүйесінде не ашуландырады?',hint:'Шынайы жаз — әрбір жауапты оқимыз.',placeholder:'Мысалы: жоғары комиссия, алдану қорқынышы...'},
+ en:{text:"What's most annoying about how skin trading works today?",hint:"Write it straight — we read every answer. At least 20 chars.",placeholder:'e.g. insane fees, fear of scams, no local currency, clunky UI...'}},
+{id:'contact',b:6,type:'contact',req:false,
+ ru:{text:'Хочешь узнать о запуске WinSkin первым?',hint:'Telegram или email — пришлём бонус при запуске. Необязательно.'},
+ kz:{text:'WinSkin іске қосылғанда бірінші болып білгің келе ме?',hint:'Telegram немесе email — міндетті емес.'},
+ en:{text:'Want to be first to know when WinSkin launches?',hint:"Drop your Telegram or email — we'll send a launch bonus. Optional."}}
+];
+
+// ═══ STATE ══════════════════════════════════════════════════
+let currentQ=0;let answers={};let iin='';let dragSrc=null;
+const TOTAL=QS.length;
+
+// ═══ UTILS ══════════════════════════════════════════════════
+function openLink(u){window.open(u,'_blank')}
+function qL(q){return q[LANG]||q.ru||{}}
+function getIINAge(v){
+  if(!v||v.length<2)return -1;
+  const y2=parseInt(v.substring(0,2),10);
+  const g7=v.length>=7?parseInt(v[6],10):-1;
+  let fy;
+  // Use 7th digit if valid (1-6)
+  if(g7>=1&&g7<=2) fy=1800+y2;
+  else if(g7>=3&&g7<=4) fy=1900+y2;
+  else if(g7>=5&&g7<=6) fy=2000+y2;
+  else {
+    // 7th digit invalid or missing — infer century from year digits
+    const curYear=new Date().getFullYear();
+    const cur2=curYear%100;
+    // If y2 <= current 2-digit year, likely born in 2000s; otherwise 1900s
+    fy = y2<=cur2 ? 2000+y2 : 1900+y2;
+  }
+  return new Date().getFullYear()-fy;
+}
+function hashIIN(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h)^s.charCodeAt(i);return(h>>>0).toString(36).toUpperCase().padStart(6,'0').slice(0,6)}
+function genPromo(v){const h=hashIIN(v||('A'+Date.now().toString(36)));return`PRIME-${h.slice(0,3)}-${h.slice(3)}`}
+
+// ═══ PROGRESS ═══════════════════════════════════════════════
+function updateProg(){
+  const pct=Math.round(currentQ/TOTAL*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  const q=QS[currentQ];
+  if(q){const bn=TR[LANG]?.blocks||TR.ru.blocks;document.getElementById('prog-name').textContent=bn[q.b]||'';}
+  const dr=document.getElementById('dots-row');dr.innerHTML='';
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i<currentQ?' done':i===currentQ?' now':'');dr.appendChild(d);}
+}
+
+// ═══ RENDER ═════════════════════════════════════════════════
+function renderQ(idx){
+  const q=QS[idx];if(!q){finishSurvey();return;}
+  updateProg();
+  const l=qL(q);
+  const bn=TR[LANG]?.blocks||TR.ru.blocks;
+  let h=`<div class="q-wrap card">
+    <div class="q-meta">
+      <span class="q-idx">${idx+1}&thinsp;/&thinsp;${TOTAL}</span>
+      <span style="color:var(--border);font-size:10px">●</span>
+      <span class="q-tag">${bn[q.b]||''}</span>
+    </div>
+    <div class="q-text">${l.text||''}${q.req?'<span class="q-req">*</span>':''}</div>
+    ${l.hint?`<div class="q-hint">${l.hint}</div>`:''}`;
+
+  switch(q.type){
+    case'iin':h+=renderIIN();break;
+    case'single':h+=renderSingle(q,l);break;
+    case'multi':h+=renderMulti(q,l);break;
+    case'scale':h+=renderScale(q,l);break;
+    case'likert':h+=renderLikert(q,l);break;
+    case'text':h+=renderText(q,l);break;
+    case'rank':h+=renderRank(q,l);break;
+    case'contact':h+=renderContact(q,l);break;
+  }
+  h+=`<div class="v-msg" id="v-msg"></div></div>`;
+  const last=idx===TOTAL-1;
+  h+=`<div class="nav-row">`;
+  if(idx>0)h+=`<button class="nav-back" onclick="prevQ()">${t('nav.back')}</button>`;
+  h+=`<button class="nav-next${last?' fin':''}" onclick="nextQ()">${last?t('nav.fin'):t('nav.next')}</button>`;
+  if(!q.req)h+=`<button class="nav-skip" onclick="skipQ()">${t('nav.skip')}</button>`;
+  h+=`</div>`;
+  document.getElementById('sb').innerHTML=h;
+  postRender(q,l,idx);
+}
+function renderSingle(q,l){
+  const sv=answers[q.id];let h='<div class="opts">';
+  (l.opts||[]).forEach((o,i)=>{
+    const obj=typeof o==='object',sel=sv===i?'sel':'';
+    h+=`<button class="opt ${sel}" onclick="pickSingle('${q.id}',${i},this)"><span class="o-circle"></span><span class="o-body">${obj?o.t:o}${obj&&o.s?`<span class="o-sub">${o.s}</span>`:''}</span></button>`;
+  });
+  return h+'</div>';
+}
+function pickSingle(id,i,el){answers[id]=i;el.closest('.opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');hideV();}
+function renderMulti(q,l){
+  const sv=answers[q.id]||[];let h='<div class="opts">';
+  (l.opts||[]).forEach((o,i)=>{
+    const sel=sv.includes(i)?'sel':'';
+    h+=`<button class="opt ${sel}" onclick="pickMulti('${q.id}',${i},this)"><span class="o-circle o-square"></span><span class="o-body">${o}</span></button>`;
+  });
+  return h+'</div>';
+}
+function pickMulti(id,i,el){if(!answers[id])answers[id]=[];const a=answers[id],p=a.indexOf(i);p===-1?a.push(i):a.splice(p,1);el.classList.toggle('sel',a.includes(i));hideV();}
+function renderScale(q,l){
+  const v=answers[q.id]!==undefined?answers[q.id]:Math.ceil((q.min+q.max)/2);
+  const tks=Array.from({length:q.max-q.min+1},()=>'<div class="tick"></div>').join('');
+  return `<div><div class="scale-ends"><span>${q.min}</span><span>${q.max}</span></div>
+    <input type="range" min="${q.min}" max="${q.max}" step="1" value="${v}" id="rng-${q.id}" oninput="setScale('${q.id}',this.value)">
+    <div class="scale-ticks">${tks}</div>
+    <div class="scale-val" id="sv-${q.id}">${v}</div>
+    <div class="scale-desc" id="sd-${q.id}">${(l.descs||[])[v]||''}</div>
+  </div>`;
+}
+function setScale(id,v){
+  v=parseInt(v);answers[id]=v;
+  const svel=document.getElementById('sv-'+id),sdel=document.getElementById('sd-'+id);
+  if(svel)svel.textContent=v;
+  const q=QS.find(x=>x.id===id);if(sdel)sdel.textContent=(qL(q).descs||[])[v]||'';
+}
+function renderLikert(q,l){
+  const sv=answers[q.id]||{};
+  let h=`<div class="likert"><div class="likert-hd"><div class="likert-hd-lbl">${l.text||''}</div><div class="lk-nums">${[1,2,3,4,5].map(n=>`<div class="lk-num">${n}</div>`).join('')}</div></div>`;
+  (l.rows||[]).forEach((row,ri)=>{
+    h+=`<div class="likert-row"><div class="lk-lbl">${row}</div><div class="lk-btns">`;
+    for(let v=1;v<=5;v++){const on=sv[ri]===v?'on':'';h+=`<button class="lk-btn ${on}" onclick="setLikert('${q.id}',${ri},${v},this)">${v}</button>`;}
+    h+=`</div></div>`;
+  });
+  return h+'</div>';
+}
+function setLikert(id,row,val,el){if(!answers[id])answers[id]={};answers[id][row]=val;el.closest('.likert-row').querySelectorAll('.lk-btn').forEach((b,i)=>b.classList.toggle('on',i+1===val));hideV();}
+function renderIIN(){
+  const cells=Array.from({length:12},(_,i)=>{
+    const v=iin[i]||'';
+    return`<input class="iin-c${v?' filled':''}" type="tel" inputmode="numeric" maxlength="1" id="ic-${i}" value="${v}" oninput="iinIn(${i},this)" onkeydown="iinKey(${i},event)" autocomplete="off">`;
+  });
+  let h=`<label class="iin-lbl">${t('iin.lbl')}</label><div class="iin-grid">`;
+  for(let i=0;i<12;i++){if(i===6)h+=`<span class="iin-sep-col">–</span>`;h+=cells[i];}
+  h+=`</div><div class="f-err" id="iin-err"></div>`;
+  return h;
+}
+function iinIn(idx,el){
+  el.value=el.value.replace(/\D/g,'').charAt(0);
+  el.classList.toggle('filled',!!el.value);
+  rebuildIIN();
+  if(el.value){const nx=document.getElementById('ic-'+(idx+1));if(nx)nx.focus();}
+}
+function iinKey(idx,e){
+  if(e.key==='Backspace'&&!e.target.value){const pv=document.getElementById('ic-'+(idx-1));if(pv){pv.value='';pv.classList.remove('filled');pv.focus();}rebuildIIN();}
+  if(e.key==='ArrowLeft'&&idx>0)document.getElementById('ic-'+(idx-1)).focus();
+  if(e.key==='ArrowRight'&&idx<11)document.getElementById('ic-'+(idx+1)).focus();
+}
+function rebuildIIN(){let s='';for(let i=0;i<12;i++){const el=document.getElementById('ic-'+i);s+=el?(el.value||''):'';}iin=s;}
+function renderText(q,l){
+  const sv=answers[q.id]||'';
+  return`<textarea class="t-input" id="ta-${q.id}" rows="4" maxlength="${q.maxLen||500}" placeholder="${l.placeholder||''}" oninput="setTxt('${q.id}',this)">${sv}</textarea><div class="f-err" id="err-${q.id}"></div><div class="char-ct" id="cc-${q.id}">${sv.length}/${q.maxLen||500}</div>`;
+}
+function setTxt(id,el){
+  answers[id]=el.value;
+  const q=QS.find(x=>x.id===id);
+  const cc=document.getElementById('cc-'+id);if(cc)cc.textContent=el.value.length+'/'+(q.maxLen||500);hideV();
+}
+function renderRank(q,l){
+  const items=l.items||[],order=answers[q.id]||items.map((_,i)=>i);
+  let h=`<div class="rank-list" id="rk-${q.id}">`;
+  order.forEach((oi,pos)=>{
+    const txt=items[oi]||oi;
+    h+=`<div class="rank-item" draggable="true" data-orig="${oi}" ondragstart="rdS(event)" ondragover="rdO(event)" ondrop="rdD(event,'${q.id}')" ondragleave="rdL(event)"><div class="r-num">${pos+1}</div><span class="r-grip">⠿</span><div class="r-txt">${txt}</div></div>`;
+  });
+  if(!answers[q.id])answers[q.id]=items.map((_,i)=>i);
+  return h+`</div>`;
+}
+function rdS(e){dragSrc=e.currentTarget;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';}
+function rdO(e){e.preventDefault();e.currentTarget.classList.add('over');}
+function rdL(e){e.currentTarget.classList.remove('over');}
+function rdD(e,id){
+  e.preventDefault();const tgt=e.currentTarget;tgt.classList.remove('over');
+  if(!dragSrc||dragSrc===tgt)return;
+  const list=tgt.parentNode;
+  const items=[...list.children],si=items.indexOf(dragSrc),ti=items.indexOf(tgt);
+  if(si<ti)list.insertBefore(dragSrc,tgt.nextSibling);else list.insertBefore(dragSrc,tgt);
+  dragSrc.classList.remove('dragging');
+  [...list.children].forEach((el,i)=>el.querySelector('.r-num').textContent=i+1);
+  const q=QS.find(x=>x.id===id);answers[id]=[...list.children].map(el=>parseInt(el.dataset.orig));
+}
+function renderContact(q,l){
+  const sv=answers[q.id]||{};
+  return`<div class="contact-g"><div><label class="c-lbl">Telegram</label><input class="t-input" type="text" id="tg-f" value="${sv.tg||''}" placeholder="@username" oninput="saveCt()"><div class="f-err" id="tg-err"></div></div><div><label class="c-lbl">Email</label><input class="t-input" type="email" id="em-f" value="${sv.email||''}" placeholder="you@example.com" oninput="saveCt()"><div class="f-err" id="em-err"></div></div></div>`;
+}
+function saveCt(){const tg=document.getElementById('tg-f')?.value.trim()||'';const em=document.getElementById('em-f')?.value.trim()||'';answers['contact']={tg,email:em};}
+function postRender(q,l,idx){
+  if(q.type==='scale'&&answers[q.id]===undefined){const el=document.getElementById('rng-'+q.id);if(el)answers[q.id]=parseInt(el.value);}
+  if(q.type==='iin')setTimeout(()=>{const f=document.getElementById('ic-0');if(f)f.focus();},80);
+  if(q.type==='contact'){const sv=answers['contact']||{};const tg=document.getElementById('tg-f');const em=document.getElementById('em-f');if(tg)tg.value=sv.tg||'';if(em)em.value=sv.email||'';}
+}
+
+// ═══ VALIDATION ═════════════════════════════════════════════
+function validate(q){
+  const l=qL(q);
+  if(q.type==='iin'){
+    rebuildIIN();
+    if(!/^\d{12}$/.test(iin)){document.querySelectorAll('.iin-c').forEach(d=>d.classList.add('ec'));showV(t('val.iin.len'));return false;}
+    const age=getIINAge(iin);
+    if(age<12||age>45){showAgeGate();return null;}
+    return true;
+  }
+  if(!q.req)return true;
+  if(q.type==='single'){if(answers[q.id]===undefined){showV(t('val.pick'));return false;}return true;}
+  if(q.type==='multi'){const a=answers[q.id]||[];if(a.length<(q.min||1)){showV(t('val.multi'));return false;}return true;}
+  if(q.type==='scale')return true;
+  if(q.type==='likert'){
+    const sv=answers[q.id]||{},done=Object.keys(sv).length,total=(l.rows||[]).length;
+    if(done<total){showV(t('val.likert',{n:total-done}));return false;}return true;
+  }
+  if(q.type==='text'){
+    const v=answers[q.id]||'';if(v.length<(q.minLen||10)){showV(t('val.text',{n:q.minLen||10}));const ta=document.getElementById('ta-'+q.id);if(ta)ta.classList.add('terr');return false;}return true;
+  }
+  if(q.type==='rank')return true;
+  return true;
+}
+function showV(msg){
+  const el=document.getElementById('v-msg');if(el){el.textContent='⚠ '+msg;el.classList.add('show');}
+  const btn=document.querySelector('.nav-next');
+  if(btn){btn.style.transition='transform .07s';btn.style.transform='translateX(-5px)';setTimeout(()=>{btn.style.transform='translateX(5px)';setTimeout(()=>{btn.style.transform='';},80);},80);}
+}
+function hideV(){const el=document.getElementById('v-msg');if(el)el.classList.remove('show');}
+
+// ═══ NAVIGATION ═════════════════════════════════════════════
+function nextQ(){
+  const q=QS[currentQ],res=validate(q);
+  if(res===null)return;if(res===false)return;
+  currentQ++;
+  if(currentQ>=TOTAL)finishSurvey();
+  else{renderQ(currentQ);window.scrollTo({top:0,behavior:'smooth'});}
+}
+function prevQ(){if(currentQ>0){currentQ--;renderQ(currentQ);window.scrollTo({top:0,behavior:'smooth'});}}
+function skipQ(){currentQ++;if(currentQ>=TOTAL)finishSurvey();else{renderQ(currentQ);window.scrollTo({top:0,behavior:'smooth'});}}
+function showAgeGate(){
+  document.getElementById('sb').innerHTML='';
+  document.getElementById('prog-block').style.display='none';
+  document.getElementById('hero-block').style.display='none';
+  document.getElementById('gate-age').classList.add('show');
+}
+
+// ═══ FINISH ═════════════════════════════════════════════════
+function finishSurvey(){
+  const promo=genPromo(iin);
+  answers._promo=promo;answers._ts=new Date().toISOString();answers._lang=LANG;answers._hash=hashIIN(iin||'anon');
+  try{localStorage.setItem('ws_s_'+answers._hash,JSON.stringify(answers));}catch(e){}
+  document.getElementById('sb').innerHTML='';
+  document.getElementById('prog-block').style.display='none';
+  document.getElementById('hero-block').style.display='none';
+  document.getElementById('promo-out').textContent=promo;
+  const qc=Object.keys(answers).filter(k=>!k.startsWith('_')).length;
+  const spL=['<$10','$10–30','$30–100','$100–300','$300–1K','$1K+','?'];
+  const sp=answers.annual_spend!==undefined?(spL[answers.annual_spend]||'?'):'—';
+  document.getElementById('stat-grid').innerHTML=`
+    <div class="s-box"><div class="s-val">${qc}</div><div class="s-lbl">${t('stat.ans')}</div></div>
+    <div class="s-box"><div class="s-val">7</div><div class="s-lbl">${t('stat.blk')}</div></div>
+    <div class="s-box"><div class="s-val">${sp}</div><div class="s-lbl">${t('stat.spend')}</div></div>`;
+  document.getElementById('result-screen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function copyPromo(){
+  const code=document.getElementById('promo-out').textContent;
+  const btn=document.getElementById('copy-btn');
+  navigator.clipboard.writeText(code).catch(()=>{const ta=document.createElement('textarea');ta.value=code;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);});
+  const copied={ru:'Скопировано!',kz:'Көшірілді!',en:'Copied!'};
+  btn.innerHTML=`✅ ${copied[LANG]||'Copied!'}`;btn.classList.add('ok');
+  setTimeout(()=>{btn.innerHTML=`📋 <span id="copy-lbl">${t('res.copy')}</span>`;btn.classList.remove('ok');},2500);
+}
+
+// ═══ INIT ═══════════════════════════════════════════════════
+renderQ(0);
+</script>
+</body>
+</html>
